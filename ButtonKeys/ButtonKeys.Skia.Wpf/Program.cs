@@ -1,3 +1,0 @@
-﻿namespace ButtonKeys.Skia.Gtk
-{
-}

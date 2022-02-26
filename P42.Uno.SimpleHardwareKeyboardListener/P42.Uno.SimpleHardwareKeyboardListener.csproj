@@ -1,0 +1,23 @@
+<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+	<!--
+	Adding project references to this project requires some manual adjustments.
+	Please see https://github.com/unoplatform/uno/issues/3909 for more details.
+	-->
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;xamarinios10;xamarinmac20;MonoAndroid11.0;monoandroid10.0</TargetFrameworks>
+    	<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' AND '$(USERNAME)' == 'ben' ">uap10.0.18362;$(TargetFrameworks);</TargetFrameworks>
+		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
+		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+		
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Uno.UI" Version="4.0.11" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="**\*.cs" Exclude="$(DefaultItemExcludes)"/>
+		<UpToDateCheckInput Include="**\*.cs" Exclude="$(DefaultItemExcludes)" />
+	</ItemGroup>
+</Project>
