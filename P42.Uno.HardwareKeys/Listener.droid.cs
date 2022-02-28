@@ -68,12 +68,12 @@ namespace P42.Uno.HardwareKeys
 
         void SyncModifiers(Android.Views.KeyEvent e)
         {
-            IsShiftPressed = e.IsShiftPressed;
-            IsControlPressed = e.IsCtrlPressed;
-            IsWindowsPressed = e.IsMetaPressed;
-            IsMenuPressed = e.IsAltPressed;
-            IsCapsLockEngaged = e.IsCapsLockOn;
-            IsNumLockEngaged = e.IsNumLockOn;
+            IsShiftPressed = e.IsShiftPressed ? KeyState.True : KeyState.False;
+            IsControlPressed = e.IsCtrlPressed ? KeyState.True : KeyState.False;
+            IsWindowsPressed = e.IsMetaPressed ? KeyState.True : KeyState.False;
+            IsMenuPressed = e.IsAltPressed ? KeyState.True : KeyState.False;
+            IsCapsLockEnabled = e.IsCapsLockOn ? KeyState.True : KeyState.False;
+            IsNumLockEnabled = e.IsNumLockOn ? KeyState.True : KeyState.False;
         }
     }
 }

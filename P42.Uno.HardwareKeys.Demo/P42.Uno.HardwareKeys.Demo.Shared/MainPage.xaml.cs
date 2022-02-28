@@ -27,11 +27,14 @@ namespace P42.Uno.HardwareKeys.Demo
         Listener _listener;
         Brush _gray = new SolidColorBrush(Color.FromArgb(0x7F, 0x7F, 0x7F, 0x7F));
         Brush _transparent = new SolidColorBrush(Colors.Transparent);
+        Brush _unknown = new SolidColorBrush(Color.FromArgb(0x3F, 0x7F, 0x7F, 0x7F));
         DependencyObject _lastFocusedElement;
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            Windows.UI.Xaml.Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
 
             _listener = new Listener();
             _listener.Name = "HardwareKeys.Listener";
@@ -47,24 +50,34 @@ namespace P42.Uno.HardwareKeys.Demo
             FocusManager.LosingFocus += FocusManager_LosingFocus;
 
 
-            _listener.IsCapsLockEngagedChanged += UpdateModifiers;
+            _listener.IsCapsLockEnabledChanged += UpdateModifiers;
             _listener.IsShiftPressedChanged += UpdateModifiers;
             _listener.IsControlPressedChanged += UpdateModifiers;
             _listener.IsWindowsPressedChanged += UpdateModifiers;
             _listener.IsMenuPressedChanged += UpdateModifiers;
-            _listener.IsNumLockEngagedChanged += UpdateModifiers;
+            _listener.IsNumLockEnabledChanged += UpdateModifiers;
 
-            UpdateModifiers(null, default);
+            UpdateModifiers(null, false);
+        }
+
+        private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
+        {
+#if __IOS__ || __ANDROID__
+            System.Diagnostics.Debug.WriteLine($"CoreWindow_KeyDown: {args.VirtualKey} {args.KeyStatus}");
+#endif
         }
 
         void UpdateModifiers(object sender, bool state)
+            => UpdateModifiers(null, KeyState.Unknown);
+
+        void UpdateModifiers(object sender, KeyState state)
         {
-            _capsLockBorder.Background = _listener.IsCapsLockEngaged ? _gray : _transparent;
-            _shiftBorder.Background = _listener.IsShiftPressed ? _gray : _transparent;
-            _controlBorder.Background = _listener.IsControlPressed ? _gray : _transparent;
-            _windowsBorder.Background = _listener.IsWindowsPressed ? _gray : _transparent;
-            _menuBorder.Background = _listener.IsMenuPressed ? _gray : _transparent;
-            _numLockBorder.Background = _listener.IsNumLockEngaged ? _gray : _transparent;
+            _capsLockBorder.Background = _listener.IsCapsLockEnabled == KeyState.True ? _gray : _listener.IsCapsLockEnabled == KeyState.False ? _transparent : _unknown;
+            _shiftBorder.Background = _listener.IsShiftPressed == KeyState.True ? _gray : _listener.IsShiftPressed == KeyState.False ? _transparent : _unknown;
+            _controlBorder.Background = _listener.IsControlPressed == KeyState.True ? _gray : _listener.IsControlPressed == KeyState.False ? _transparent : _unknown;
+            _windowsBorder.Background = _listener.IsWindowsPressed == KeyState.True ? _gray : _listener.IsWindowsPressed == KeyState.False ? _transparent : _unknown;
+            _menuBorder.Background = _listener.IsMenuPressed == KeyState.True ? _gray : _listener.IsMenuPressed == KeyState.False ? _transparent : _unknown;
+            _numLockBorder.Background = _listener.IsNumLockEnabled == KeyState.True ? _gray : _listener.IsNumLockEnabled == KeyState.False ? _transparent : _unknown;
         }
 
         private void _listener_SimpleKeyUp(object sender, UnoKeyEventArgs e)

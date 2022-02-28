@@ -42,34 +42,38 @@ namespace P42.Uno.HardwareKeys
             _textBox.Name = "HardwareKeys.Listener.TextBox";
             _textBox.TextChanged += _textBox_TextChanged;
 
-            _platformLoaded = PlatformLoaded;
-            _platformGotFocus = PlatformGotFocus;
-
-            _platformIsCapsLockEngaged = PlatformCapsLockOn;
-            _platformIsNumLockEngaged = PlatformNumLockOn;
-            IsCapsLockEngaged = PlatformCapsLockOn();
-            IsNumLockEngaged = PlatformNumLockOn();
-
         }
 
-        private void PlatformLoaded(object arg1, RoutedEventArgs arg2)
-        {
-            IsCapsLockEngaged = PlatformCapsLockOn();
-            IsNumLockEngaged = PlatformNumLockOn();
-        }
+        partial void PlatformNumLockQuery()
+            => IsNumLockEnabled = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
+            ? KeyState.True
+            : KeyState.False;
 
-        void PlatformGotFocus(object sender, FocusManagerGotFocusEventArgs e)
-        {
-            IsCapsLockEngaged = PlatformCapsLockOn();
-            IsNumLockEngaged = PlatformNumLockOn();
-        }
+        partial void PlatformCapsLockQuery()
+            => IsCapsLockEnabled = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.CapitalLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
+            ? KeyState.True
+            : KeyState.False;
 
+        partial void PlatformShiftPressedQuery()
+            => IsShiftPressed = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.Shift) & Windows.UI.Core.CoreVirtualKeyStates.Down) != 0
+            ? KeyState.True
+            : KeyState.False;
 
-        bool PlatformNumLockOn()
-            => (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
+        partial void PlatformControlPressedQuery()
+            => IsControlPressed = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.Control) & Windows.UI.Core.CoreVirtualKeyStates.Down) != 0
+            ? KeyState.True
+            : KeyState.False;
 
-        bool PlatformCapsLockOn()
-            => (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.CapitalLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
+        partial void PlatformMenuPressedQuery()
+            => IsMenuPressed = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.Menu) & Windows.UI.Core.CoreVirtualKeyStates.Down) != 0
+            ? KeyState.True
+            : KeyState.False;
+
+        partial void PlatformWindowsPressedQuery()
+            => IsWindowsPressed = ((Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.LeftWindows) | Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.RightWindows)) & Windows.UI.Core.CoreVirtualKeyStates.Down) != 0
+            ? KeyState.True
+            : KeyState.False;
+
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {

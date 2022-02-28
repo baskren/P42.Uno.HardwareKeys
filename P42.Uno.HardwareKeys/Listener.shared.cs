@@ -18,8 +18,8 @@ namespace P42.Uno.HardwareKeys
         #region Properties
 
 
-        bool _isControlPressed;
-        public bool IsControlPressed
+        KeyState _isControlPressed;
+        public KeyState IsControlPressed
         {
             get => _isControlPressed;
             private set
@@ -33,8 +33,8 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        bool _isShiftPressed;
-        public bool IsShiftPressed
+        KeyState _isShiftPressed;
+        public KeyState IsShiftPressed
         {
             get => _isShiftPressed;
             private set
@@ -48,8 +48,8 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        bool _isWindowsPressed;
-        public bool IsWindowsPressed
+        KeyState _isWindowsPressed;
+        public KeyState IsWindowsPressed
         {
             get => _isWindowsPressed;
             private set
@@ -63,13 +63,13 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        bool _isMenuPressed;
-        public bool IsMenuPressed
+        KeyState _isMenuPressed;
+        public KeyState IsMenuPressed
         {
             get => _isMenuPressed;
             private set
             {
-                if (!_isMenuPressed != value)
+                if (_isMenuPressed != value)
                 {
                     _isMenuPressed = value;
                     OnIsMenuPressedChanged();
@@ -78,32 +78,32 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        bool _isNumLockEngaged;
-        public bool IsNumLockEngaged
+        KeyState _numLockEnabled;
+        public KeyState IsNumLockEnabled
         {
-            get => _isNumLockEngaged;
+            get => _numLockEnabled;
             private set
             {
-                if (_isNumLockEngaged != value)
+                if (_numLockEnabled != value)
                 {
-                    _isNumLockEngaged = value;
-                    OnIsNumLockPressedChanged();
-                    IsNumLockEngagedChanged?.Invoke(this, value);
+                    _numLockEnabled = value;
+                    OnNumLockStateChanged();
+                    IsNumLockEnabledChanged?.Invoke(this, value);
                 }
             }
         }
 
-        bool _isCapsLockEngaged;
-        public bool IsCapsLockEngaged
+        KeyState _capsLockEnabled;
+        public KeyState IsCapsLockEnabled
         {
-            get => _isCapsLockEngaged;
+            get => _capsLockEnabled;
             private set
             {
-                if (_isCapsLockEngaged != value)
+                if (_capsLockEnabled != value)
                 {
-                    _isCapsLockEngaged = value;
-                    OnIsCapsLockPressedChanged();
-                    IsCapsLockEngagedChanged?.Invoke(this, value);
+                    _capsLockEnabled = value;
+                    OnCapsLockStateChanged();
+                    IsCapsLockEnabledChanged?.Invoke(this, value);
                 }
             }
         }
@@ -135,13 +135,13 @@ namespace P42.Uno.HardwareKeys
             {
                 var result = new List<VirtualKey>();
 
-                if (IsShiftPressed)
+                if (IsShiftPressed == KeyState.True)
                     result.Add(VirtualKey.Shift);
-                if (IsControlPressed)
+                if (IsControlPressed == KeyState.True)
                     result.Add(VirtualKey.Control);
-                if (IsWindowsPressed)
+                if (IsWindowsPressed == KeyState.True)
                     result.Add(VirtualKey.LeftWindows);
-                if (IsMenuPressed)
+                if (IsMenuPressed == KeyState.True)
                     result.Add(VirtualKey.Menu);
                 //if (IsCapsLockEngaged)
                 //    result.Add(VirtualKey.CapitalLock);
@@ -157,22 +157,18 @@ namespace P42.Uno.HardwareKeys
 
 
         #region Fields
-        Func<bool> _platformIsNumLockEngaged;
-        Func<bool> _platformIsCapsLockEngaged;
-        Action<object, FocusManagerGotFocusEventArgs> _platformGotFocus;
-        Action<object, RoutedEventArgs> _platformLoaded;
         bool _tryingToDeactivate;
         Control _platformCoreElement;
         #endregion
 
 
         #region Events
-        public event EventHandler<bool> IsControlPressedChanged;
-        public event EventHandler<bool> IsShiftPressedChanged;
-        public event EventHandler<bool> IsWindowsPressedChanged;
-        public event EventHandler<bool> IsMenuPressedChanged;
-        public event EventHandler<bool> IsNumLockEngagedChanged;
-        public event EventHandler<bool> IsCapsLockEngagedChanged;
+        public event EventHandler<KeyState> IsControlPressedChanged;
+        public event EventHandler<KeyState> IsShiftPressedChanged;
+        public event EventHandler<KeyState> IsWindowsPressedChanged;
+        public event EventHandler<KeyState> IsMenuPressedChanged;
+        public event EventHandler<KeyState> IsNumLockEnabledChanged;
+        public event EventHandler<KeyState> IsCapsLockEnabledChanged;
         public event EventHandler<UnoKeyEventArgs> SimpleKeyDown;
         public event EventHandler<UnoKeyEventArgs> SimpleKeyUp;
         #endregion
@@ -186,10 +182,6 @@ namespace P42.Uno.HardwareKeys
             FocusManager.GotFocus += FocusManager_GotFocus;
             FocusManager.LosingFocus += FocusManager_LosingFocus;
 
-#if !TIZEN && !__MACOS__
-            Loaded += Listener_Loaded;
-#endif
-
         }
 
         #endregion
@@ -197,13 +189,22 @@ namespace P42.Uno.HardwareKeys
 
         #region Private Methods
 
+        #region Partial Methods
+        partial void PlatformShiftPressedQuery();
+        partial void PlatformControlPressedQuery();
+        partial void PlatformWindowsPressedQuery();
+        partial void PlatformMenuPressedQuery();
+        partial void PlatformNumLockQuery();
+        partial void PlatformCapsLockQuery();
+        #endregion
+
         #region Virtual Methods
         protected virtual void OnIsControlPressedChanged() { }
         protected virtual void OnIsShiftPressedChanged() { }
         protected virtual void OnIsWindowsPressedChanged() { }
         protected virtual void OnIsMenuPressedChanged() { }
-        protected virtual void OnIsNumLockPressedChanged() { }
-        protected virtual void OnIsCapsLockPressedChanged() { }
+        protected virtual void OnNumLockStateChanged() { }
+        protected virtual void OnCapsLockStateChanged() { }
 
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
             => SimpleKeyDown?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
@@ -214,26 +215,49 @@ namespace P42.Uno.HardwareKeys
         #endregion
 
 
-        private void Listener_Loaded(object sender, RoutedEventArgs e)
-        {
-            _platformLoaded?.Invoke(sender, e);
-        }
-
 
         private void FocusManager_GotFocus(object sender, FocusManagerGotFocusEventArgs e)
         {
-            _platformGotFocus?.Invoke(sender, e);
+            if (e.NewFocusedElement == _platformCoreElement)
+            {
+                PlatformShiftPressedQuery();
+                PlatformControlPressedQuery();
+                PlatformWindowsPressedQuery();
+                PlatformMenuPressedQuery();
+                PlatformCapsLockQuery();
+                PlatformNumLockQuery();
+            }
         }
 
         private void FocusManager_LosingFocus(object sender, LosingFocusEventArgs e)
         {
-            // this enables IsActivated = false to work
-            if (!_tryingToDeactivate && IsActive && (e.NewFocusedElement != null && e.NewFocusedElement != _platformCoreElement))
-                e.Cancel = true;
-            //else if (!_tryingToDeactivate && IsActive && e.FocusState == FocusState.Unfocused)
-            //    e.Cancel = true;
+            System.Diagnostics.Debug.WriteLine($"LosingFocus: ENTER sender:[{sender}] old:{e.OldFocusedElement} new:{e.NewFocusedElement} state:{e.FocusState} inDev:{e.InputDevice}");
+            if (!_tryingToDeactivate && e.OldFocusedElement == _platformCoreElement)
+            {
+                System.Diagnostics.Debug.WriteLine($"LosingFocus: A");
+                e.TryCancel();
+            }
             else
-                _tryingToDeactivate = false;
+            {
+                IsShiftPressed = KeyState.Unknown;
+                IsControlPressed = KeyState.Unknown;
+                IsWindowsPressed = KeyState.Unknown;
+                IsMenuPressed = KeyState.Unknown;
+                IsCapsLockEnabled = KeyState.Unknown;
+                IsNumLockEnabled = KeyState.Unknown;
+            }
+
+            _tryingToDeactivate = false;
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            IsShiftPressed = KeyState.Unknown;
+            IsControlPressed = KeyState.Unknown;
+            IsWindowsPressed = KeyState.Unknown;
+            IsMenuPressed = KeyState.Unknown;
+            IsCapsLockEnabled = KeyState.Unknown;
+            IsNumLockEnabled = KeyState.Unknown;
         }
 
 
@@ -246,62 +270,32 @@ namespace P42.Uno.HardwareKeys
                 case VirtualKey.LeftControl:
                 case VirtualKey.RightControl:
                     isModifier = true;
-                    IsControlPressed = down;
+                    IsControlPressed = down ? KeyState.True : KeyState.False;
                     break;
                 case VirtualKey.Shift:
                 case VirtualKey.LeftShift:
                 case VirtualKey.RightShift:
                     isModifier = true;
-                    IsShiftPressed = down;
+                    IsShiftPressed = down ? KeyState.True : KeyState.False;
                     break;
                 case VirtualKey.LeftWindows:
                 case VirtualKey.RightWindows:
                     isModifier = true;
-                    IsWindowsPressed = down;
+                    IsWindowsPressed = down ? KeyState.True : KeyState.False;
                     break;
                 case VirtualKey.Menu:
                 case VirtualKey.LeftMenu:
                 case VirtualKey.RightMenu:
                     isModifier = true;
-                    IsMenuPressed = down;
-                    break;
-                case VirtualKey.NumberKeyLock:
-                    isModifier = true;
-                    if (_platformIsNumLockEngaged == null && down)
-                        IsNumLockEngaged = !IsNumLockEngaged;
-                    break;
-                case VirtualKey.CapitalLock:
-                    isModifier = true;
-                    if (_platformIsCapsLockEngaged == null && down)
-                        IsCapsLockEngaged = !IsCapsLockEngaged;
+                    IsMenuPressed = down ? KeyState.True : KeyState.False;
                     break;
             }
-            if (_platformIsNumLockEngaged != null)
-                IsNumLockEngaged = _platformIsNumLockEngaged.Invoke();
-            if (_platformIsCapsLockEngaged != null)
-                IsCapsLockEngaged = _platformIsCapsLockEngaged.Invoke();
+
+            PlatformNumLockQuery();
+            PlatformCapsLockQuery();
 
             return isModifier;
         }
-
-        /* Shouldn't need because is handled by ProcessModifier
-        readonly static VirtualKey[] _modifierKeyBoundaries = new VirtualKey[]
-{
-                VirtualKey.None,
-                VirtualKey.XButton2,
-                VirtualKey.Enter,
-                VirtualKey.Menu,
-                VirtualKey.Pause,
-                VirtualKey.Kanji,
-                VirtualKey.Z,
-                VirtualKey.RightWindows,
-                VirtualKey.Scroll,
-                VirtualKey.GoBack
-};
-
-        bool IsModifier(VirtualKey key)
-            => IsInGroup(key, _modifierKeyBoundaries, false);
-        */
 
         readonly static VirtualKey[] _charKeyBoundaries = new VirtualKey[]
         {
