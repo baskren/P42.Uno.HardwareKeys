@@ -85,26 +85,26 @@ namespace P42.Uno.HardwareKeys
         {
             if (uiKey.KeyCode == UIKeyboardHidUsage.KeyboardCapsLock)
             {
-                if (IsCapsLockEnabled == KeyState.True)
-                    IsCapsLockEnabled = KeyState.False;
-                else if (IsCapsLockEnabled == KeyState.False)
-                    IsCapsLockEnabled = KeyState.True;
+                if (IsCapsLockEngaged == KeyState.True)
+                    IsCapsLockEngaged = KeyState.False;
+                else if (IsCapsLockEngaged == KeyState.False)
+                    IsCapsLockEngaged = KeyState.True;
             }
             else if (uiKey.KeyCode == UIKeyboardHidUsage.KeypadNumLock)
             {
-                if (IsNumLockEnabled == KeyState.True)
-                    IsNumLockEnabled = KeyState.False;
-                else if (IsNumLockEnabled == KeyState.False)
-                    IsNumLockEnabled = KeyState.True;
+                if (IsNumLockEngaged == KeyState.True)
+                    IsNumLockEngaged = KeyState.False;
+                else if (IsNumLockEngaged == KeyState.False)
+                    IsNumLockEngaged = KeyState.True;
             }
             else
             {
-                IsCapsLockEnabled = (uiKey.ModifierFlags & UIKeyModifierFlags.AlphaShift) != 0
+                IsCapsLockEngaged = (uiKey.ModifierFlags & UIKeyModifierFlags.AlphaShift) != 0
                     ? KeyState.True : KeyState.False;
-                IsNumLockEnabled = (uiKey.ModifierFlags & UIKeyModifierFlags.NumericPad) != 0
+                IsNumLockEngaged = (uiKey.ModifierFlags & UIKeyModifierFlags.NumericPad) != 0
                     ? KeyState.True : KeyState.False;
             }
-            System.Diagnostics.Debug.WriteLine($"UIKey.KeyCode: [{uiKey.KeyCode}] IsCapsLockEngaged[{IsCapsLockEnabled}] IsNumLockEngaged[{IsNumLockEnabled}]");
+            System.Diagnostics.Debug.WriteLine($"UIKey.KeyCode: [{uiKey.KeyCode}] IsCapsLockEngaged[{IsCapsLockEngaged}] IsNumLockEngaged[{IsNumLockEngaged}]");
         }
 
         void SyncModifiers(UIKey uiKey)

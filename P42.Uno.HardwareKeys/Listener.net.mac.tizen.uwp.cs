@@ -45,12 +45,12 @@ namespace P42.Uno.HardwareKeys
         }
 
         partial void PlatformNumLockQuery()
-            => IsNumLockEnabled = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
+            => IsNumLockEngaged = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
             ? KeyState.True
             : KeyState.False;
 
         partial void PlatformCapsLockQuery()
-            => IsCapsLockEnabled = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.CapitalLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
+            => IsCapsLockEngaged = (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.CapitalLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0
             ? KeyState.True
             : KeyState.False;
 

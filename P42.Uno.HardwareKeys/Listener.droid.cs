@@ -72,8 +72,8 @@ namespace P42.Uno.HardwareKeys
             IsControlPressed = e.IsCtrlPressed ? KeyState.True : KeyState.False;
             IsWindowsPressed = e.IsMetaPressed ? KeyState.True : KeyState.False;
             IsMenuPressed = e.IsAltPressed ? KeyState.True : KeyState.False;
-            IsCapsLockEnabled = e.IsCapsLockOn ? KeyState.True : KeyState.False;
-            IsNumLockEnabled = e.IsNumLockOn ? KeyState.True : KeyState.False;
+            IsCapsLockEngaged = e.IsCapsLockOn ? KeyState.True : KeyState.False;
+            IsNumLockEngaged = e.IsNumLockOn ? KeyState.True : KeyState.False;
         }
     }
 }

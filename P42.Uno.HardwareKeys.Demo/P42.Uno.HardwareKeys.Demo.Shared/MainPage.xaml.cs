@@ -50,12 +50,12 @@ namespace P42.Uno.HardwareKeys.Demo
             FocusManager.LosingFocus += FocusManager_LosingFocus;
 
 
-            _listener.IsCapsLockEnabledChanged += UpdateModifiers;
+            _listener.IsCapsLockEngagedChanged += UpdateModifiers;
             _listener.IsShiftPressedChanged += UpdateModifiers;
             _listener.IsControlPressedChanged += UpdateModifiers;
             _listener.IsWindowsPressedChanged += UpdateModifiers;
             _listener.IsMenuPressedChanged += UpdateModifiers;
-            _listener.IsNumLockEnabledChanged += UpdateModifiers;
+            _listener.IsNumLockEngagedChanged += UpdateModifiers;
 
             UpdateModifiers(null, false);
         }
@@ -72,12 +72,12 @@ namespace P42.Uno.HardwareKeys.Demo
 
         void UpdateModifiers(object sender, KeyState state)
         {
-            _capsLockBorder.Background = _listener.IsCapsLockEnabled == KeyState.True ? _gray : _listener.IsCapsLockEnabled == KeyState.False ? _transparent : _unknown;
+            _capsLockBorder.Background = _listener.IsCapsLockEngaged == KeyState.True ? _gray : _listener.IsCapsLockEngaged == KeyState.False ? _transparent : _unknown;
             _shiftBorder.Background = _listener.IsShiftPressed == KeyState.True ? _gray : _listener.IsShiftPressed == KeyState.False ? _transparent : _unknown;
             _controlBorder.Background = _listener.IsControlPressed == KeyState.True ? _gray : _listener.IsControlPressed == KeyState.False ? _transparent : _unknown;
             _windowsBorder.Background = _listener.IsWindowsPressed == KeyState.True ? _gray : _listener.IsWindowsPressed == KeyState.False ? _transparent : _unknown;
             _menuBorder.Background = _listener.IsMenuPressed == KeyState.True ? _gray : _listener.IsMenuPressed == KeyState.False ? _transparent : _unknown;
-            _numLockBorder.Background = _listener.IsNumLockEnabled == KeyState.True ? _gray : _listener.IsNumLockEnabled == KeyState.False ? _transparent : _unknown;
+            _numLockBorder.Background = _listener.IsNumLockEngaged == KeyState.True ? _gray : _listener.IsNumLockEngaged == KeyState.False ? _transparent : _unknown;
         }
 
         private void _listener_SimpleKeyUp(object sender, UnoKeyEventArgs e)

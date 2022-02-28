@@ -78,32 +78,32 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        KeyState _numLockEnabled;
-        public KeyState IsNumLockEnabled
+        KeyState _numLockEngaged;
+        public KeyState IsNumLockEngaged
         {
-            get => _numLockEnabled;
+            get => _numLockEngaged;
             private set
             {
-                if (_numLockEnabled != value)
+                if (_numLockEngaged != value)
                 {
-                    _numLockEnabled = value;
+                    _numLockEngaged = value;
                     OnNumLockStateChanged();
-                    IsNumLockEnabledChanged?.Invoke(this, value);
+                    IsNumLockEngagedChanged?.Invoke(this, value);
                 }
             }
         }
 
-        KeyState _capsLockEnabled;
-        public KeyState IsCapsLockEnabled
+        KeyState _capsLockEngaged;
+        public KeyState IsCapsLockEngaged
         {
-            get => _capsLockEnabled;
+            get => _capsLockEngaged;
             private set
             {
-                if (_capsLockEnabled != value)
+                if (_capsLockEngaged != value)
                 {
-                    _capsLockEnabled = value;
+                    _capsLockEngaged = value;
                     OnCapsLockStateChanged();
-                    IsCapsLockEnabledChanged?.Invoke(this, value);
+                    IsCapsLockEngagedChanged?.Invoke(this, value);
                 }
             }
         }
@@ -143,10 +143,10 @@ namespace P42.Uno.HardwareKeys
                     result.Add(VirtualKey.LeftWindows);
                 if (IsMenuPressed == KeyState.True)
                     result.Add(VirtualKey.Menu);
-                //if (IsCapsLockEngaged)
-                //    result.Add(VirtualKey.CapitalLock);
-                //if (IsNumLockEngaged)
-                //    result.Add(VirtualKey.NumberKeyLock);
+                if (IsCapsLockEngaged == KeyState.True)
+                    result.Add(VirtualKey.CapitalLock);
+                if (IsNumLockEngaged == KeyState.True)
+                    result.Add(VirtualKey.NumberKeyLock);
 
                 return result.ToArray();
             }
@@ -167,8 +167,8 @@ namespace P42.Uno.HardwareKeys
         public event EventHandler<KeyState> IsShiftPressedChanged;
         public event EventHandler<KeyState> IsWindowsPressedChanged;
         public event EventHandler<KeyState> IsMenuPressedChanged;
-        public event EventHandler<KeyState> IsNumLockEnabledChanged;
-        public event EventHandler<KeyState> IsCapsLockEnabledChanged;
+        public event EventHandler<KeyState> IsNumLockEngagedChanged;
+        public event EventHandler<KeyState> IsCapsLockEngagedChanged;
         public event EventHandler<UnoKeyEventArgs> SimpleKeyDown;
         public event EventHandler<UnoKeyEventArgs> SimpleKeyUp;
         #endregion
@@ -239,12 +239,13 @@ namespace P42.Uno.HardwareKeys
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine($"LosingFocus: B");
                 IsShiftPressed = KeyState.Unknown;
                 IsControlPressed = KeyState.Unknown;
                 IsWindowsPressed = KeyState.Unknown;
                 IsMenuPressed = KeyState.Unknown;
-                IsCapsLockEnabled = KeyState.Unknown;
-                IsNumLockEnabled = KeyState.Unknown;
+                IsCapsLockEngaged = KeyState.Unknown;
+                IsNumLockEngaged = KeyState.Unknown;
             }
 
             _tryingToDeactivate = false;
@@ -252,12 +253,13 @@ namespace P42.Uno.HardwareKeys
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"OnLostFocus");
             IsShiftPressed = KeyState.Unknown;
             IsControlPressed = KeyState.Unknown;
             IsWindowsPressed = KeyState.Unknown;
             IsMenuPressed = KeyState.Unknown;
-            IsCapsLockEnabled = KeyState.Unknown;
-            IsNumLockEnabled = KeyState.Unknown;
+            IsCapsLockEngaged = KeyState.Unknown;
+            IsNumLockEngaged = KeyState.Unknown;
         }
 
 
