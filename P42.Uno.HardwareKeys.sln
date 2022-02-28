@@ -13,19 +13,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.i
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.UWP", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.UWP\P42.Uno.HardwareKeys.Demo.UWP.csproj", "{412006BE-CA17-4182-A765-E771A8D71E50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.Wasm", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Wasm\P42.Uno.HardwareKeys.Demo.Wasm.csproj", "{E689AC9B-CF38-4E01-83A9-9C720C765881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys.Demo.Wasm", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Wasm\P42.Uno.HardwareKeys.Demo.Wasm.csproj", "{E689AC9B-CF38-4E01-83A9-9C720C765881}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.macOS", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.macOS\P42.Uno.HardwareKeys.Demo.macOS.csproj", "{AA2C5DA1-A8E8-4779-971C-DF275750AC35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host\P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host.csproj", "{55BFA0B0-09B5-4394-B37C-C74D35400560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host\P42.Uno.HardwareKeys.Demo.Skia.Wpf.Host.csproj", "{55BFA0B0-09B5-4394-B37C-C74D35400560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.Skia.Wpf", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Wpf\P42.Uno.HardwareKeys.Demo.Skia.Wpf.csproj", "{0C89DF43-7BD2-406E-BA71-ABEE801FBC56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys.Demo.Skia.Wpf", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Wpf\P42.Uno.HardwareKeys.Demo.Skia.Wpf.csproj", "{0C89DF43-7BD2-406E-BA71-ABEE801FBC56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.Skia.Gtk", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Gtk\P42.Uno.HardwareKeys.Demo.Skia.Gtk.csproj", "{26159237-C5DD-4774-AAE7-2F37D3BEEAC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys.Demo.Skia.Gtk", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Gtk\P42.Uno.HardwareKeys.Demo.Skia.Gtk.csproj", "{26159237-C5DD-4774-AAE7-2F37D3BEEAC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys.Demo.Skia.Tizen", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Tizen\P42.Uno.HardwareKeys.Demo.Skia.Tizen.csproj", "{BE67216F-F3FF-4229-AACA-C0495E0A8CA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys.Demo.Skia.Tizen", "P42.Uno.HardwareKeys.Demo\P42.Uno.HardwareKeys.Demo.Skia.Tizen\P42.Uno.HardwareKeys.Demo.Skia.Tizen.csproj", "{BE67216F-F3FF-4229-AACA-C0495E0A8CA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P42.Uno.HardwareKeys", "P42.Uno.HardwareKeys\P42.Uno.HardwareKeys.csproj", "{465C630A-FF10-49CC-BE62-6B46FA692BEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P42.Uno.HardwareKeys", "P42.Uno.HardwareKeys\P42.Uno.HardwareKeys.csproj", "{465C630A-FF10-49CC-BE62-6B46FA692BEA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -190,6 +190,7 @@ Global
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|ARM64.Build.0 = Debug|iPhoneSimulator
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|iPhone.Build.0 = Debug|iPhone
+		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|iPhone.Deploy.0 = Debug|iPhone
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{798A638C-672B-463B-A6B2-B4A8AF5340BA}.Debug|x64.ActiveCfg = Debug|iPhoneSimulator

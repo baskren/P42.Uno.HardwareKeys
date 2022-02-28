@@ -82,14 +82,16 @@ namespace P42.Uno.HardwareKeys
         public KeyState IsNumLockEngaged
         {
             get => _numLockEngaged;
-            private set
+            set
             {
+#if __IOS__ || __ANDROID__
                 if (_numLockEngaged != value)
                 {
                     _numLockEngaged = value;
                     OnNumLockStateChanged();
                     IsNumLockEngagedChanged?.Invoke(this, value);
                 }
+#endif
             }
         }
 
@@ -190,6 +192,7 @@ namespace P42.Uno.HardwareKeys
         #region Private Methods
 
         #region Partial Methods
+        partial void PlatformGotFocus();
         partial void PlatformShiftPressedQuery();
         partial void PlatformControlPressedQuery();
         partial void PlatformWindowsPressedQuery();
@@ -220,6 +223,7 @@ namespace P42.Uno.HardwareKeys
         {
             if (e.NewFocusedElement == _platformCoreElement)
             {
+                PlatformGotFocus();
                 PlatformShiftPressedQuery();
                 PlatformControlPressedQuery();
                 PlatformWindowsPressedQuery();
@@ -245,7 +249,9 @@ namespace P42.Uno.HardwareKeys
                 IsWindowsPressed = KeyState.Unknown;
                 IsMenuPressed = KeyState.Unknown;
                 IsCapsLockEngaged = KeyState.Unknown;
+#if !__IOS__
                 IsNumLockEngaged = KeyState.Unknown;
+#endif
             }
 
             _tryingToDeactivate = false;
@@ -259,7 +265,9 @@ namespace P42.Uno.HardwareKeys
             IsWindowsPressed = KeyState.Unknown;
             IsMenuPressed = KeyState.Unknown;
             IsCapsLockEngaged = KeyState.Unknown;
+#if !__IOS__
             IsNumLockEngaged = KeyState.Unknown;
+#endif
         }
 
 
@@ -290,6 +298,10 @@ namespace P42.Uno.HardwareKeys
                 case VirtualKey.RightMenu:
                     isModifier = true;
                     IsMenuPressed = down ? KeyState.True : KeyState.False;
+                    break;
+                case VirtualKey.CapitalLock:
+                case VirtualKey.NumberKeyLock:
+                    isModifier = true;
                     break;
             }
 
@@ -325,7 +337,7 @@ namespace P42.Uno.HardwareKeys
             return IsInGroup(key, _charKeyBoundaries, true);
         }
 
-#if NETSTANDARD 
+#if NETSTANDARD
         static readonly List<VirtualKey> knownKeys = Enum.GetValues(typeof(VirtualKey)).Cast<VirtualKey>().ToList();
 #else
         static readonly HashSet<VirtualKey> knownKeys = Enum.GetValues(typeof(VirtualKey)).Cast<VirtualKey>().ToHashSet();
@@ -347,7 +359,7 @@ namespace P42.Uno.HardwareKeys
             return state;
         }
 
-        #endregion
+#endregion
 
     }
 }
