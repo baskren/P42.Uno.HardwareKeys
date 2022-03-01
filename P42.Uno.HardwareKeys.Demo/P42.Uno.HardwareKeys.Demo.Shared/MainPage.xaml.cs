@@ -44,7 +44,7 @@ namespace P42.Uno.HardwareKeys.Demo
             _listener.SimpleKeyDown += _listener_SimpleKeyDown;
             _listener.SimpleKeyUp += _listener_SimpleKeyUp;
 
-            _toggleFocusButton.Click += _toggleFocusButton_Click;
+            //_toggleFocusButton.Click += _toggleFocusButton_Click;
 
             FocusManager.GotFocus += FocusManager_GotFocus;
             FocusManager.LosingFocus += FocusManager_LosingFocus;
@@ -58,7 +58,9 @@ namespace P42.Uno.HardwareKeys.Demo
             _listener.IsNumLockEngagedChanged += UpdateModifiers;
 
             UpdateModifiers(null, false);
+
         }
+
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
         {
@@ -120,9 +122,10 @@ namespace P42.Uno.HardwareKeys.Demo
                 _currentFocusTextBlock.Text = element?.ToString() ?? "NO FOCUS";
         }
 
-        void _toggleFocusButton_Click(object sender, RoutedEventArgs e)
+
+        private void _hwKeysActiveToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            _listener.IsActive = !_listener.IsActive;
+            _listener.IsActive = _hwKeysActiveToggle.IsOn;
         }
 
     }
