@@ -60,7 +60,6 @@ namespace P42.Uno.HardwareKeys
 
                 if (ProcessModifier(key, true))
                 {
-                    //TODO: NumLock off transforms
                     if (!QuietModifiers)
                         OnSimpleKeyDown(text, key);
                 }

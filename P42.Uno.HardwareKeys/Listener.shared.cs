@@ -221,6 +221,7 @@ namespace P42.Uno.HardwareKeys
 
         private void FocusManager_GotFocus(object sender, FocusManagerGotFocusEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({sender}, {e.NewFocusedElement})");
             if (e.NewFocusedElement == _platformCoreElement)
             {
                 PlatformGotFocus();

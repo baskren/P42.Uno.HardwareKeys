@@ -29,7 +29,7 @@ namespace P42.Uno.HardwareKeys.Demo
         protected override void OnGotFocus(RoutedEventArgs e)
         {
             base.OnGotFocus(e);
-            FocusManager.TryFocusAsync(_textBox, FocusState.Programmatic);
+            //FocusManager.TryFocusAsync(_textBox, FocusState.Programmatic);
         }
 
 
