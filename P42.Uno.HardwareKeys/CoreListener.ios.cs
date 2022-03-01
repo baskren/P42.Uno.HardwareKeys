@@ -14,54 +14,20 @@ using Windows.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys
 {
-    public partial class Listener : TextBox
+    public partial class CoreListener : TextBox
     {
         void PlatformBuild()
         {
             _platformCoreElement = this;
             UIKeyboard.Notifications.ObserveWillShow(OnShown);
             IsNumLockEngaged = KeyState.True;
-
-
         }
-
-        /*
-        UIView FindUIField(UIView view, int depth = 0)
-        {
-            if (view is UITextField)
-                return view;
-
-            var tabs = new string('\t', depth + 1);
-            foreach (var child in view.Subviews)
-            {
-                System.Diagnostics.Debug.WriteLine($"FindUIField:{tabs}:{child}");
-                if (child is UITextField field)
-                    return field;
-                if (FindUIField(child) is UITextField childField)
-                    return childField;
-            }
-            return null;
-        }
-
-        public override void SubviewAdded(UIView uiview)
-        {
-            base.SubviewAdded(uiview);
-        }
-        */
 
         private void OnShown(object sender, UIKeyboardEventArgs e)
         {
             // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
             IsActive = false;
         }
-
-        /*
-        protected override void OnKeyDown(KeyRoutedEventArgs args)
-        {
-            //base.OnKeyDown(args);
-            args.Handled = true;
-        }
-        */
 
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
         {
@@ -99,13 +65,7 @@ namespace P42.Uno.HardwareKeys
                     OnSimpleKeyDown(text, key);
             }
         }
-        /*
-        protected override void OnKeyUp(KeyRoutedEventArgs args)
-        {
-            //base.OnKeyUp(args);
-            args.Handled = true;
-        }
-        */
+
 
         public override void PressesEnded(NSSet<UIPress> presses, UIPressesEvent evt)
         {

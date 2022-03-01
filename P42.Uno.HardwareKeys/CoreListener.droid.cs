@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys
 {
-    public partial class Listener : Button
+    public partial class CoreListener : Button
     {
         void PlatformBuild()
         {
