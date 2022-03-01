@@ -41,8 +41,8 @@ namespace P42.Uno.HardwareKeys.Demo
             Grid.SetRow(_listener, 6);
             _grid.Children.Add(_listener);
 
-            _listener.SimpleKeyDown += _listener_SimpleKeyDown;
-            _listener.SimpleKeyUp += _listener_SimpleKeyUp;
+            _listener.HardwareKeyDown += _listener_KeyDown;
+            _listener.HardwareKeyUp += _listener_KeyUp;
 
             //_toggleFocusButton.Click += _toggleFocusButton_Click;
 
@@ -82,7 +82,7 @@ namespace P42.Uno.HardwareKeys.Demo
             _numLockBorder.Background = _listener.IsNumLockEngaged == KeyState.True ? _gray : _listener.IsNumLockEngaged == KeyState.False ? _transparent : _unknown;
         }
 
-        private void _listener_SimpleKeyUp(object sender, UnoKeyEventArgs e)
+        private void _listener_KeyUp(object sender, UnoKeyEventArgs e)
         {
             if (e.Modifiers != null && e.Modifiers.Any())
                 _upKeyTextBlock.Text = $"<<{e.Characters}>>  [{string.Join("]+[", e.Modifiers)}] + [{e.VirtualKey}]";
@@ -90,7 +90,7 @@ namespace P42.Uno.HardwareKeys.Demo
                 _upKeyTextBlock.Text = $"<<{e.Characters}>>  [{e.VirtualKey}]";
         }
 
-        private void _listener_SimpleKeyDown(object sender, UnoKeyEventArgs e)
+        private void _listener_KeyDown(object sender, UnoKeyEventArgs e)
         {
             if (e.Modifiers != null && e.Modifiers.Any())
                 _downKeyTextBlock.Text = $"<<{e.Characters}>>  [{string.Join("]+[", e.Modifiers)}] + [{e.VirtualKey}]";

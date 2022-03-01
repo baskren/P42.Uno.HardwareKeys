@@ -171,8 +171,8 @@ namespace P42.Uno.HardwareKeys
         public event EventHandler<KeyState> IsMenuPressedChanged;
         public event EventHandler<KeyState> IsNumLockEngagedChanged;
         public event EventHandler<KeyState> IsCapsLockEngagedChanged;
-        public event EventHandler<UnoKeyEventArgs> SimpleKeyDown;
-        public event EventHandler<UnoKeyEventArgs> SimpleKeyUp;
+        public event EventHandler<UnoKeyEventArgs> HardwareKeyDown;
+        public event EventHandler<UnoKeyEventArgs> HardwareKeyUp;
         #endregion
 
 
@@ -210,10 +210,10 @@ namespace P42.Uno.HardwareKeys
         protected virtual void OnCapsLockStateChanged() { }
 
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
-            => SimpleKeyDown?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+            => HardwareKeyDown?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
 
         protected virtual void OnSimpleKeyUp(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
-            => SimpleKeyUp?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+            => HardwareKeyUp?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
 
         #endregion
 

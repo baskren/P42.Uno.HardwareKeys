@@ -90,16 +90,16 @@ namespace P42.Uno.HardwareKeys
             remove => _coreListener.IsCapsLockEngagedChanged -= value;
         }
 
-        public event EventHandler<UnoKeyEventArgs> SimpleKeyDown
+        public event EventHandler<UnoKeyEventArgs> HardwareKeyDown
         {
-            add => _coreListener.SimpleKeyDown += value;
-            remove => _coreListener.SimpleKeyDown -= value;
+            add => _coreListener.HardwareKeyDown += value;
+            remove => _coreListener.HardwareKeyDown -= value;
         }
 
-        public event EventHandler<UnoKeyEventArgs> SimpleKeyUp
+        public event EventHandler<UnoKeyEventArgs> HardwareKeyUp
         {
-            add => _coreListener.SimpleKeyUp += value;
-            remove => _coreListener.SimpleKeyUp -= value;
+            add => _coreListener.HardwareKeyUp += value;
+            remove => _coreListener.HardwareKeyUp -= value;
         }
         #endregion
 
