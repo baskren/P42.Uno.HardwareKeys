@@ -39,7 +39,7 @@ namespace P42.Uno.HardwareKeys
         void PlatformBuild()
         {
             Content = _platformCoreElement = _textBox = new TextBox();
-            _textBox.Name = "HardwareKeys.Listener.TextBox";
+            _textBox.Name = "HardwareKeys.CoreListener";
             _textBox.TextChanged += _textBox_TextChanged;
 
         }

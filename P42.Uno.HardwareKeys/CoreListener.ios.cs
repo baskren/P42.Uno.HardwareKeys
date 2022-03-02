@@ -18,6 +18,7 @@ namespace P42.Uno.HardwareKeys
     {
         void PlatformBuild()
         {
+            Name = "HardwareKeys.CoreListener";
             _platformCoreElement = this;
             UIKeyboard.Notifications.ObserveWillShow(OnShown);
             IsNumLockEngaged = KeyState.True;

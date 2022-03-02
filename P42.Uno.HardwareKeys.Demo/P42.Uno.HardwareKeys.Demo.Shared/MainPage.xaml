@@ -7,23 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:toolkit="using:Uno.UI.Toolkit"
-    xmlns:sk="clr-namespace:P42.Uno.HardwareKeys;assembly=P42.Uno.HardwareKeys"
+    xmlns:hk="using:P42.Uno.HardwareKeys"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <!--
-    <Grid x:Name="_grid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="SimpleKeys" Margin="20" FontSize="30" />
-        <TextBlock Grid.Row="1" x:Name="_downKeyTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="2" x:Name="_upKeyTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
-    -->
 
     <Grid x:Name="_grid" toolkit:VisibleBoundsPadding.PaddingMask="All" RowSpacing="3" Margin="3">
         <Grid.RowDefinitions>
@@ -96,6 +81,18 @@
             <ToggleSwitch Grid.Column="1" Grid.Row="1" x:Name="_hwKeysActiveToggle" Toggled="_hwKeysActiveToggle_Toggled" />
         </Grid>
         <TextBlock Grid.Row="5" x:Name="_currentFocusTextBlock" VerticalAlignment="Center" HorizontalAlignment="Left" />
+        <hk:Listener 
+            Grid.Row="6" 
+            x:Name="_listener" 
+            HardwareKeyDown="_listener_KeyDown" 
+            HardwareKeyUp="_listener_KeyUp" 
+            IsCapsLockEngagedChanged="UpdateModifiers"
+            IsShiftPressedChanged="UpdateModifiers"
+            IsControlPressedChanged="UpdateModifiers"
+            IsWindowsPressedChanged="UpdateModifiers"
+            IsMenuPressedChanged="UpdateModifiers"
+            IsNumLockEngagedChanged="UpdateModifiers"
+            />
     </Grid>
 
 

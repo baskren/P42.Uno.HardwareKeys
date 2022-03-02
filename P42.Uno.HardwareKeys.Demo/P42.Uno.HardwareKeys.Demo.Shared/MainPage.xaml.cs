@@ -24,50 +24,21 @@ namespace P42.Uno.HardwareKeys.Demo
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Listener _listener;
+        //Listener _listener;
         Brush _gray = new SolidColorBrush(Color.FromArgb(0x7F, 0x7F, 0x7F, 0x7F));
         Brush _transparent = new SolidColorBrush(Colors.Transparent);
         Brush _unknown = new SolidColorBrush(Color.FromArgb(0x3F, 0x7F, 0x7F, 0x7F));
-        DependencyObject _lastFocusedElement;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            Windows.UI.Xaml.Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
-
-            _listener = new Listener();
-            _listener.Name = "HardwareKeys.Listener";
-            Grid.SetRow(_listener, 6);
-            _grid.Children.Add(_listener);
-
-            _listener.HardwareKeyDown += _listener_KeyDown;
-            _listener.HardwareKeyUp += _listener_KeyUp;
-
-            //_toggleFocusButton.Click += _toggleFocusButton_Click;
-
             FocusManager.GotFocus += FocusManager_GotFocus;
-            FocusManager.LosingFocus += FocusManager_LosingFocus;
-
-
-            _listener.IsCapsLockEngagedChanged += UpdateModifiers;
-            _listener.IsShiftPressedChanged += UpdateModifiers;
-            _listener.IsControlPressedChanged += UpdateModifiers;
-            _listener.IsWindowsPressedChanged += UpdateModifiers;
-            _listener.IsMenuPressedChanged += UpdateModifiers;
-            _listener.IsNumLockEngagedChanged += UpdateModifiers;
 
             UpdateModifiers(null, false);
 
         }
 
-
-        private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
-        {
-#if __IOS__ || __ANDROID__
-            System.Diagnostics.Debug.WriteLine($"CoreWindow_KeyDown: {args.VirtualKey} {args.KeyStatus}");
-#endif
-        }
 
         void UpdateModifiers(object sender, bool state)
             => UpdateModifiers(null, KeyState.Unknown);
@@ -96,11 +67,6 @@ namespace P42.Uno.HardwareKeys.Demo
                 _downKeyTextBlock.Text = $"<<{e.Characters}>>  [{string.Join("]+[", e.Modifiers)}] + [{e.VirtualKey}]";
             else
                 _downKeyTextBlock.Text = $"<<{e.Characters}>>  [{e.VirtualKey}]";
-        }
-
-        private void FocusManager_LosingFocus(object sender, LosingFocusEventArgs e)
-        {
-            _lastFocusedElement = e.OldFocusedElement;
         }
 
 

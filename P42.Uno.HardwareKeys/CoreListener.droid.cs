@@ -20,10 +20,9 @@ namespace P42.Uno.HardwareKeys
     {
         void PlatformBuild()
         {
+            Name = "HardwareKeys.CoreListener";
             Focusable = true;
-            //ClickMode = ClickMode.Press;
             _platformCoreElement = this;
-
         }
 
         protected override void OnKeyUp(KeyRoutedEventArgs args) { }
