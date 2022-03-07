@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Windows.System;
 
@@ -52,6 +53,24 @@ namespace P42.Uno.HardwareKeys
             return key.ToString();
         }
 
+        public static bool Equal(this VirtualKey[] source, VirtualKey[] other)
+        {
+            var sourceEmpty = source is null || !source.Any();
+            var otherEmpty = other is null || !other.Any();
+            if (sourceEmpty && otherEmpty)
+                return true;
+            if (sourceEmpty != otherEmpty)
+                return false;
+            if (source.Length != other.Length)
+                return false;
+            for (int i = 0; i < source.Length; i++)
+            {
+                if (!other.Contains(source[i]))
+                    return false;
+            }
+            return true;
+
+        }
 
 #if __ANDROID__
 

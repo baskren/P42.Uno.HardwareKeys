@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys
 {
-    public partial class CoreListener : TextBox
+    partial class CoreListener : TextBox
     {
         void PlatformBuild()
         {
