@@ -234,10 +234,11 @@ namespace P42.Uno.HardwareKeys
             if (e.NewFocusedElement == _platformCoreElement)
             {
                 PlatformGotFocus();
+                // Don't do the following here!  If using Menu to toggle between apps, this could create a false trigger!
                 //PlatformShiftPressedQuery();
                 //PlatformControlPressedQuery();
                 //PlatformWindowsPressedQuery();
-                //PlatformMenuPressedQuery();  // Don't do this here!  If using Menu to toggle between apps, this could create a false trigger!
+                //PlatformMenuPressedQuery(); 
                 PlatformCapsLockQuery();
                 PlatformNumLockQuery();
             }
