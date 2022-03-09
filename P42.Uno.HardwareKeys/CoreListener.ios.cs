@@ -137,7 +137,7 @@ namespace P42.Uno.HardwareKeys
             foreach (var flag in Enum.GetValues(typeof(UIKeyModifierFlags)).Cast<UIKeyModifierFlags>().ToArray())
                 if ((flag & uiKey.ModifierFlags) != 0)
                     flags.Add(flag);
-            System.Diagnostics.Debug.WriteLine($"[{uiKey.KeyCode}] Modifiers: [{string.Join(",", flags)}]");
+            //System.Diagnostics.Debug.WriteLine($"[{uiKey.KeyCode}] Modifiers: [{string.Join(",", flags)}]");
         }
     }
 }

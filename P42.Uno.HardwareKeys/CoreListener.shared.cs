@@ -218,17 +218,26 @@ namespace P42.Uno.HardwareKeys
         #endregion
 
 
+        string GetNameFor(object x)
+        {
+            var name = x?.GetType().ToString() ?? "null";
+
+            if (x is FrameworkElement element && !string.IsNullOrWhiteSpace(element.Name))
+                name = element.Name;
+
+            return name;
+        }
 
         private void FocusManager_GotFocus(object sender, FocusManagerGotFocusEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({sender}, {e.NewFocusedElement})");
+            //System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({GetNameFor(sender)}, {GetNameFor(e.NewFocusedElement)})");
             if (e.NewFocusedElement == _platformCoreElement)
             {
                 PlatformGotFocus();
-                PlatformShiftPressedQuery();
-                PlatformControlPressedQuery();
-                PlatformWindowsPressedQuery();
-                PlatformMenuPressedQuery();
+                //PlatformShiftPressedQuery();
+                //PlatformControlPressedQuery();
+                //PlatformWindowsPressedQuery();
+                //PlatformMenuPressedQuery();  // Don't do this here!  If using Menu to toggle between apps, this could create a false trigger!
                 PlatformCapsLockQuery();
                 PlatformNumLockQuery();
             }
@@ -236,15 +245,15 @@ namespace P42.Uno.HardwareKeys
 
         private void FocusManager_LosingFocus(object sender, LosingFocusEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"LosingFocus: ENTER sender:[{sender}] old:{e.OldFocusedElement} new:{e.NewFocusedElement} state:{e.FocusState} inDev:{e.InputDevice}");
+            //System.Diagnostics.Debug.WriteLine($"LosingFocus: ENTER sender:[{GetNameFor(sender)}] old:{GetNameFor(e.OldFocusedElement)} new:{GetNameFor(e.NewFocusedElement)} state:{e.FocusState} inDev:{e.InputDevice}");
             if (!_tryingToDeactivate && e.OldFocusedElement == _platformCoreElement)
             {
-                System.Diagnostics.Debug.WriteLine($"LosingFocus: A");
+                //System.Diagnostics.Debug.WriteLine($"LosingFocus: A");
                 e.TryCancel();
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"LosingFocus: B");
+                //System.Diagnostics.Debug.WriteLine($"LosingFocus: B");
                 IsShiftPressed = KeyState.Unknown;
                 IsControlPressed = KeyState.Unknown;
                 IsWindowsPressed = KeyState.Unknown;
@@ -260,7 +269,7 @@ namespace P42.Uno.HardwareKeys
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"OnLostFocus");
+            //System.Diagnostics.Debug.WriteLine($"OnLostFocus");
             IsShiftPressed = KeyState.Unknown;
             IsControlPressed = KeyState.Unknown;
             IsWindowsPressed = KeyState.Unknown;

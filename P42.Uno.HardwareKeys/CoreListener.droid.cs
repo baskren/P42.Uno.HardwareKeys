@@ -72,7 +72,7 @@ namespace P42.Uno.HardwareKeys
 
         public override bool OnKeyDown([GeneratedEnum] Android.Views.Keycode keyCode, Android.Views.KeyEvent e)
         {
-            System.Diagnostics.Debug.WriteLine($"Droid.OnKeyDown {keyCode}");
+            // System.Diagnostics.Debug.WriteLine($"Droid.OnKeyDown {keyCode}");
             var text = e.UnicodeChar > 0
                 ? ((char)e.UnicodeChar).ToString()
                 : String.Empty;
