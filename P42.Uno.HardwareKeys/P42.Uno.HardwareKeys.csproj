@@ -29,7 +29,7 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Uno.UI" Version="4.1.8" />
+		<PackageReference Include="Uno.UI" Version="4.3.6" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
