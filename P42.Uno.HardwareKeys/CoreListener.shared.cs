@@ -128,7 +128,7 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        public bool QuietModifiers { get; set; } = true;
+        public bool MuteModifiers { get; set; } = true;
 
 
         VirtualKey[] CurrentModifiers

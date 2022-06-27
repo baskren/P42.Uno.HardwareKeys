@@ -113,7 +113,7 @@ namespace P42.Uno.HardwareKeys
 
                 if (ProcessModifier(e.Key, true))
                 {
-                    if (!QuietModifiers)
+                    if (!MuteModifiers)
                         OnSimpleKeyDown(string.Empty, e.Key);
                 }
                 else
@@ -139,7 +139,7 @@ namespace P42.Uno.HardwareKeys
 
             if (ProcessModifier(e.Key, false))
             {
-                if (!QuietModifiers)
+                if (!MuteModifiers)
                     OnSimpleKeyUp(key, e.Key, modifiers);
             }
             else

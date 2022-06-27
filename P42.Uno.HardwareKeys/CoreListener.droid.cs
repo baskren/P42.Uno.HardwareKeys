@@ -57,7 +57,7 @@ namespace P42.Uno.HardwareKeys
             if (ProcessModifier(key, false))
             {
                 // TODO: Caps & Num Locks?!?!?!
-                if (!QuietModifiers)
+                if (!MuteModifiers)
                     OnSimpleKeyUp(text, key, modifiers);
             }
             else
@@ -101,7 +101,7 @@ namespace P42.Uno.HardwareKeys
 
             if (ProcessModifier(key, true))
             {
-                if (!QuietModifiers)
+                if (!MuteModifiers)
                     OnSimpleKeyDown(text, key);
             }
             else

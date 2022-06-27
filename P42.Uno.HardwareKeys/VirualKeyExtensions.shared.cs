@@ -12,8 +12,16 @@ using UIKit;
 
 namespace P42.Uno.HardwareKeys
 {
+    /// <summary>
+    /// Extensions for Windows.System.VirtualKey
+    /// </summary>
     public static class VirualKeyExtensions
     {
+        /// <summary>
+        /// Simplifies VirualKey to a more general interpretation
+        /// </summary>
+        /// <param name="key">VirtualKey</param>
+        /// <returns></returns>
         internal static string Simplify(this VirtualKey key)
         {
             var txt = key.ToString();
@@ -53,6 +61,12 @@ namespace P42.Uno.HardwareKeys
             return key.ToString();
         }
 
+        /// <summary>
+        /// Eguality test
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public static bool Equal(this VirtualKey[] source, VirtualKey[] other)
         {
             var sourceEmpty = source is null || !source.Any();
@@ -73,7 +87,6 @@ namespace P42.Uno.HardwareKeys
         }
 
 #if __ANDROID__
-
 
         internal static VirtualKey AsVirtualKey(this Keycode keycode)
         {

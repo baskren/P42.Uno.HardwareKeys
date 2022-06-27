@@ -5,15 +5,10 @@
 	-->
 	<PropertyGroup>
 
-	    <GenerateLibraryLayout>true</GenerateLibraryLayout>
-	    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	    <AssemblyName>P42.Uno.HardwareKeys</AssemblyName>
-	    <RootNamespace>P42.Uno.HardwareKeys</RootNamespace>
-	    <NoWarn>Uno0001;VSX1000</NoWarn>
 
-    	<TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
-  	  	<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
-	    <TargetFrameworks Condition=" $(SolutionName.Contains('.vsmac')) ">netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
+	    <TargetFrameworks>netstandard2.0;net6.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
+	    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362;net6.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
 	    <TargetFrameworks Condition=" $(SolutionName.Contains('.Droid')) ">MonoAndroid11.0</TargetFrameworks>
 	    <TargetFrameworks Condition=" $(SolutionName.Contains('.iOS')) ">Xamarin.iOS10</TargetFrameworks>
 	    <TargetFrameworks Condition=" $(SolutionName.Contains('.macOS')) ">Xamarin.Mac20</TargetFrameworks>
@@ -25,17 +20,9 @@
 
 
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-		<DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
 		
 	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Uno.UI" Version="4.3.6" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
-		<UpToDateCheckInput Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
+
 
 	<!-- ANDROID -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('android')) ">
@@ -44,16 +31,22 @@
 	</ItemGroup>
 
 	<!-- IOS -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) ">
+	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
 		<Compile Include="**\*.ios.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.ios.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- MACOS -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('mac')) ">
+  <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
 		<Compile Include="**\*.mac.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.mac.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
+
+	<!-- MacCatylst -->
+	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
+		<Compile Include="**\*.maccatylst.cs" />
+		<Compile Include="**\*.maccatylst.*.cs" />
+	</ItemGroup>  
 
 	<!-- TIZEN -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
@@ -67,10 +60,11 @@
 		<Compile Include="**\*.uwp.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
-	<!-- .NET (GtK, WPF, and WASM) -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().StartsWith('net'))">
-		<Compile Include="**\*.net.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.net.*.cs" Exclude="$(DefaultItemExcludes)" />
+	<!-- .NetStandard (WASM, GtK, Skia, etc)) -->
+  <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net6.0')) ">
+		<Compile Include="**\*.netstandard.cs" Exclude="$(DefaultItemExcludes)" />
+		<Compile Include="**\*.netstandard.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
+
 
 </Project>
