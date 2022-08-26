@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:toolkit="using:Uno.UI.Toolkit"
+    xmlns:toolkit="using:Uno.Toolkit.WinUI"
     xmlns:hk="using:P42.Uno.HardwareKeys"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 

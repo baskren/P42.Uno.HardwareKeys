@@ -9,7 +9,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Com.Nostra13.Universalimageloader.Core;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys.Demo.Droid
 {
@@ -20,7 +20,7 @@ namespace P42.Uno.HardwareKeys.Demo.Droid
 		HardwareAccelerated = true,
 		Theme = "@style/AppTheme"
 	)]
-	public class Application : Windows.UI.Xaml.NativeApplication
+	public class Application : Microsoft.UI.Xaml.NativeApplication
 	{
 		public Application(IntPtr javaReference, JniHandleOwnership transfer)
 			: base(() => new App(), javaReference, transfer)

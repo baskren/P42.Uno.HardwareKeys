@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Windows.System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace P42.Uno.HardwareKeys.Demo
 {
@@ -129,7 +129,7 @@ namespace P42.Uno.HardwareKeys.Demo
         bool IsCharacterKey(VirtualKey key)
         {
             if (IsNumpadNumKey(key))
-                return (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
+                return (Microsoft.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
 
             return IsInGroup(key, _charKeyBoundaries, true);
         }

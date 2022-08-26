@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys
 {
@@ -162,7 +163,7 @@ namespace P42.Uno.HardwareKeys
         public Listener()
         {
             Children.Add(new CoreListener().Assign(out _coreListener));
-            Children.Add(new Windows.UI.Xaml.Shapes.Rectangle { Fill = new SolidColorBrush(Colors.Red) });
+            Children.Add(new Microsoft.UI.Xaml.Shapes.Rectangle { Fill = new SolidColorBrush(Colors.Red) });
             Opacity = 0.001;
         }
         #endregion

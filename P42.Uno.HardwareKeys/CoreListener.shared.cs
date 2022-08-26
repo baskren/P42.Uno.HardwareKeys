@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Input;
 
 namespace P42.Uno.HardwareKeys
 {
@@ -112,7 +113,7 @@ namespace P42.Uno.HardwareKeys
 
         public bool IsActive
         {
-            get => FocusManager.GetFocusedElement() == _platformCoreElement;
+            get => (UIElement)FocusManager.GetFocusedElement() == (UIElement)_platformCoreElement;
             set
             {
                 if (value != IsActive)
@@ -343,10 +344,24 @@ namespace P42.Uno.HardwareKeys
         bool IsCharacterKey(VirtualKey key)
         {
             if (IsNumpadNumKey(key))
-                return (Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
-
+                //return (Microsoft.UI.Xaml.Window.Current.CoreWindow.GetKeyState(VirtualKey.NumberKeyLock) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
+                return (WinUIKeyState(key) & Windows.UI.Core.CoreVirtualKeyStates.Locked) != 0;
             return IsInGroup(key, _charKeyBoundaries, true);
         }
+
+
+        Windows.UI.Core.CoreVirtualKeyStates WinUIKeyState(VirtualKey key)
+            => Microsoft.UI.Xaml.Window.Current?.CoreWindow.GetKeyState(key) ?? InputKeyboardSource.GetKeyStateForCurrentThread(key);
+
+        KeyState WinUIKeyEngaged(VirtualKey key, Windows.UI.Core.CoreVirtualKeyStates state)
+            => (WinUIKeyState(key) & state) != 0
+            ? KeyState.True
+            : KeyState.False;
+
+        KeyState WinUIKeyEngaged(VirtualKey key1, VirtualKey key2, Windows.UI.Core.CoreVirtualKeyStates state)
+            => ((WinUIKeyState(key1) & state) | (WinUIKeyState(key2)&state )) != 0
+            ? KeyState.True
+            : KeyState.False;
 
 #if NETSTANDARD
         static readonly List<VirtualKey> knownKeys = Enum.GetValues(typeof(VirtualKey)).Cast<VirtualKey>().ToList();

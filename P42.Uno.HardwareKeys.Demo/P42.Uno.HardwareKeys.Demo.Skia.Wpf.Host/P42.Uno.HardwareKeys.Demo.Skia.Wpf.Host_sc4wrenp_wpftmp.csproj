@@ -15,7 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Uno.UI.Skia.Wpf" Version="4.0.11" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="4.0.11" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.0.11" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.0.11" />
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +249,9 @@
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.UI.FluentTheme.dll" />
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.UI.FluentTheme.v1.dll" />
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.UI.FluentTheme.v2.dll" />
-    <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui.remotecontrol\4.0.11\lib\netstandard2.0\Uno.UI.RemoteControl.dll" />
+    <ReferencePath Include="C:\Users\ben\.nuget\packages\Uno.WinUI.RemoteControl\4.0.11\lib\netstandard2.0\Uno.WinUI.RemoteControl.dll" />
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui.runtime.skia.wpf\4.0.11\lib\netcoreapp3.1\Uno.UI.Runtime.Skia.Wpf.dll" />
-    <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.UI.Toolkit.dll" />
+    <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.Toolkit.WinUI.dll" />
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.wasm.websockets\1.1.0\lib\netstandard2.0\Uno.Wasm.WebSockets.dll" />
     <ReferencePath Include="C:\Users\ben\.nuget\packages\uno.ui\4.0.11\lib\netstandard2.0\Uno.Xaml.dll" />
     <ReferencePath Include="C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.1.0\ref\netcoreapp3.1\WindowsBase.dll" />
