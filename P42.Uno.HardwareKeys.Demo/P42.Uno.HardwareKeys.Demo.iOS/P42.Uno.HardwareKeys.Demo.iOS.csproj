@@ -120,7 +120,7 @@
     <BundleResource Include="Resources\Fonts\uno-fluentui-assets.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI" Version="4.4.13" />
+    <PackageReference Include="Uno.WinUI" Version="4.4.20" />
     <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.3.8" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.4.20" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
