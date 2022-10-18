@@ -7,67 +7,11 @@
 
 	    <AssemblyName>P42.Uno.HardwareKeys</AssemblyName>
 
-	    <!--
-		    Another example of how Micrsoft just doesn't care about those who don't use only their stuff
-		  <TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
-		<TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
-	    -->
-		<TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
-		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net6.0-windows10.0.19041.0;net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
-	    <TargetFrameworks Condition=" $(SolutionName.Contains('.iOS')) ">net6.0-ios</TargetFrameworks>
-    	<TargetFrameworks Condition=" $(SolutionName.Contains('.macOS')) ">net6.0-macos</TargetFrameworks>
-    	<TargetFrameworks Condition=" $(SolutionName.Contains('.GtK')) ">net6.0</TargetFrameworks>
-    	<TargetFrameworks Condition=" $(SolutionName.Contains('.WPF')) ">net6.0</TargetFrameworks>
-    	<TargetFrameworks Condition=" $(SolutionName.Contains('.Windows')) ">net6.0-windows10.0.19041.0</TargetFrameworks>
-
+		<TargetFrameworks>net6.0;</TargetFrameworks>
 
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
 		
 	</PropertyGroup>
-
-
-	<!-- ANDROID -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('android')) ">
-		<Compile Include="**\*.droid.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.droid.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-	<!-- IOS -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
-		<Compile Include="**\*.ios.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.ios.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-	<!-- MACOS -->
-  <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
-		<Compile Include="**\*.mac.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.mac.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-	<!-- MacCatylst -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-		<Compile Include="**\*.maccatylst.cs" />
-		<Compile Include="**\*.maccatylst.*.cs" />
-	</ItemGroup>  
-
-	<!-- TIZEN -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
-		<Compile Include="**\*.tizen.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.tizen.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-	<!-- UWP -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('uap10.0')) ">
-		<Compile Include="**\*.uwp.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.uwp.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-  <!-- WinUI Windows -->
-  <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
-		<Compile Include="**\*.uwp.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.uwp.*.cs" Exclude="$(DefaultItemExcludes)" />
-  </ItemGroup>
 
 	<!-- .NetStandard (WASM, GtK, Skia, etc)) -->
     <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net6.0')) ">

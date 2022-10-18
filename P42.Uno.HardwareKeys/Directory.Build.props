@@ -52,7 +52,7 @@
 		<UpToDateCheckInput Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
 
 		<PackageReference Include="Uno.WinUI" Version="4.5.14" />
-	  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 
 	</ItemGroup>
 
