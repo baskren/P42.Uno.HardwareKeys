@@ -5,7 +5,7 @@
 	-->
 	<PropertyGroup>
 
-	    <AssemblyName>P42.Uno.HardwareKeys</AssemblyName>
+	    <AssemblyName>P42.Uno.HardwareKeys.Wasm</AssemblyName>
 
 		<TargetFrameworks>net6.0;</TargetFrameworks>
 
