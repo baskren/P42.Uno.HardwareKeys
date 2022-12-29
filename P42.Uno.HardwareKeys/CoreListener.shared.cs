@@ -225,12 +225,21 @@ namespace P42.Uno.HardwareKeys
 
         async Task MoveFocusToEditable()
         {
-            if (FocusManager.FindNextFocusableElement(FocusNavigationDirection.Next) is Control control &&
-                control.IsTextEditable())
-                await TryFocusAsync(control, FocusState.Keyboard);
-            else
-                //_lastFocusedControl?.Focus(FocusState.Keyboard);
-                await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+            try
+            {
+                if (FocusManager.FindNextFocusableElement(FocusNavigationDirection.Next) is Control control &&
+                    control.IsTextEditable())
+                    await TryFocusAsync(control, FocusState.Keyboard);
+                else if (_lastFocusedControl != null)
+                    //_lastFocusedControl?.Focus(FocusState.Keyboard);
+                    await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+            }
+            catch (Exception e) 
+            {
+                if (_lastFocusedControl != null)
+                    await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+            }
+
         }
 
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
