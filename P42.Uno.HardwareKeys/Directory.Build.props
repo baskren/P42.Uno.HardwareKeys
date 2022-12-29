@@ -44,15 +44,14 @@
   </PropertyGroup>
 
 	<ItemGroup>
-    	<None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
 		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
 
 		<Compile Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
 		<UpToDateCheckInput Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
 
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
-	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+	    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 
 	</ItemGroup>
 
