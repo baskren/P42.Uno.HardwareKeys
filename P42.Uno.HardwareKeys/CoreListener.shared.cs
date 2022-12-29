@@ -223,21 +223,30 @@ namespace P42.Uno.HardwareKeys
             return result;
         }
 
+        async Task MoveFocusToEditable()
+        {
+            if (FocusManager.FindNextFocusableElement(FocusNavigationDirection.Next) is Control control &&
+                control.IsTextEditable())
+                await TryFocusAsync(control, FocusState.Keyboard);
+            else
+                //_lastFocusedControl?.Focus(FocusState.Keyboard);
+                await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+        }
+
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
         {
-            
+            if (!IsActive)
+            {
+                MoveFocusToEditable();
+                return;
+            }
+
             if (IsTabToMoveFocusEnabled &&
                 virtualKey == VirtualKey.Tab &&
                 !modifiers.HasNonToggleModifier()
                )
             {
-                if (FocusManager.FindNextFocusableElement(FocusNavigationDirection.Next) is Control control &&
-                    control.IsTextEditable())
-                    //control.Focus(FocusState.Keyboard);
-                    TryFocusAsync(control, FocusState.Keyboard);
-                else
-                    //_lastFocusedControl?.Focus(FocusState.Keyboard);
-                    TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+                MoveFocusToEditable();
                 return;
             }
             
@@ -247,16 +256,6 @@ namespace P42.Uno.HardwareKeys
 
         protected virtual void OnSimpleKeyUp(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
         {
-            /*
-            if (IsTabToMoveFocusEnabled &&
-                virtualKey == VirtualKey.Tab &&
-                !modifiers.HasNonToggleModifier()
-               )
-            {
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                return;
-            }
-            */
 
             HardwareKeyUp?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
         }
@@ -292,6 +291,9 @@ namespace P42.Uno.HardwareKeys
             }
             else if (IsActive)
             {
+                if (e.NewFocusedElement == this)
+                    return;
+
                 if (e.NewFocusedElement == default || (GreedyFocus && !((Control)e.NewFocusedElement).IsTextEditable()))
                     await TryFocusAsync(this, FocusState.Keyboard);
             }
