@@ -18,6 +18,39 @@ namespace P42.Uno.HardwareKeys
     public static class VirualKeyExtensions
     {
         /// <summary>
+        /// Is the key [Shift], [Control], [Menu], or [Windows]?
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool IsNonToggleModifier(this VirtualKey key)
+        {
+            switch (key)
+            {
+                case VirtualKey.Shift:
+                case VirtualKey.LeftShift:
+                case VirtualKey.RightShift:
+                case VirtualKey.Control:
+                case VirtualKey.LeftControl:
+                case VirtualKey.RightControl:
+                case VirtualKey.Menu:
+                case VirtualKey.LeftMenu:
+                case VirtualKey.RightMenu:
+                case VirtualKey.LeftWindows:
+                case VirtualKey.RightWindows:
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Does a IEnumerable of VirtualKey have a Non-toggle modifier?
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <returns></returns>
+        public static bool HasNonToggleModifier(this IEnumerable<VirtualKey> keys)
+            => keys?.Any(k => k.IsNonToggleModifier()) ?? false;
+
+        /// <summary>
         /// Simplifies VirualKey to a more general interpretation
         /// </summary>
         /// <param name="key">VirtualKey</param>

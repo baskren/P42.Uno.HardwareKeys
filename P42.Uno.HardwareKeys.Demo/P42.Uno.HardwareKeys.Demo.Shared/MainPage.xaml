@@ -6,11 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:toolkit="using:Uno.Toolkit.WinUI"
+    xmlns:utu="clr-namespace:Uno.Toolkit.UI;assembly=Uno.Toolkit.UI"
     xmlns:hk="using:P42.Uno.HardwareKeys"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="_grid" toolkit:VisibleBoundsPadding.PaddingMask="All" RowSpacing="3" Margin="3">
+    <Grid 
+        x:Name="_grid" 
+        RowSpacing="3" 
+        utu:SafeArea="Left,Top,Right,Bottom"
+        Margin="3">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
@@ -69,6 +73,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -76,9 +81,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Text="Focus Competitor:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="1" Text="Hardware Keys Active:" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            
+            <TextBlock Grid.Row="2" Text="IsTabToMoveFocusEnabled:"/>
+
             <TextBox Grid.Column="1" Grid.Row="0" x:Name="_focusCompetitorTextBox" PlaceholderText="Focus Competitor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <ToggleSwitch Grid.Column="1" Grid.Row="1" x:Name="_hwKeysActiveToggle" Toggled="_hwKeysActiveToggle_Toggled" />
+            <ToggleSwitch Grid.Column="1" Grid.Row="2" x:Name="_hwKeysIsTabToMoveFocusToggle" Toggled="_hwKeysIsTabToMoveFocus_Toggled" />
         </Grid>
         <TextBlock Grid.Row="5" x:Name="_currentFocusTextBlock" VerticalAlignment="Center" HorizontalAlignment="Left" />
         <hk:Listener 

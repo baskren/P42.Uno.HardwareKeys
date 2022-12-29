@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -92,6 +93,12 @@ namespace P42.Uno.HardwareKeys.Demo
         private void _hwKeysActiveToggle_Toggled(object sender, RoutedEventArgs e)
         {
             _listener.IsActive = _hwKeysActiveToggle.IsOn;
+        }
+
+        // _hwKeysIsTabToMoveFocus_Toggled
+        private void _hwKeysIsTabToMoveFocus_Toggled(object sender, RoutedEventArgs e)
+        {
+            _listener.IsTabToMoveFocusEnabled = _hwKeysIsTabToMoveFocusToggle.IsOn;
         }
 
     }

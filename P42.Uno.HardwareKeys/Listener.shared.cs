@@ -73,6 +73,11 @@ namespace P42.Uno.HardwareKeys
             set => _coreListener.MuteModifiers = value;
         }
 
+        public bool IsTabToMoveFocusEnabled
+        {
+            get => _coreListener.IsTabToMoveFocusEnabled;
+            set => _coreListener.IsTabToMoveFocusEnabled = value;
+        }
         #endregion
 
 

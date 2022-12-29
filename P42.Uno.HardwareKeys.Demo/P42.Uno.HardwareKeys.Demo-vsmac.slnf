@@ -1,0 +1,14 @@
+{
+  "solution": {
+    "path": "P42.Uno.HardwareKeys.Demo.sln",
+    "projects": [
+		"P42.Uno.HardwareKeys.Demo.Shared\\P42.Uno.HardwareKeys.Demo.Shared.shproj",
+
+		"P42.Uno.HardwareKeys.Demo.Mobile\\P42.Uno.HardwareKeys.Demo.Mobile.csproj",
+
+		"P42.Uno.HardwareKeys.Demo.Wasm\\P42.Uno.HardwareKeys.Demo.Wasm.csproj",
+
+		"P42.Uno.HardwareKeys.Demo.Skia.Gtk\\P42.Uno.HardwareKeys.Demo.Skia.Gtk.csproj",
+    ]
+  }
+}

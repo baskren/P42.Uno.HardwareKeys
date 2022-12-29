@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Input;
+using System.Threading.Tasks;
 
 namespace P42.Uno.HardwareKeys
 {
@@ -18,7 +19,7 @@ namespace P42.Uno.HardwareKeys
     {
         #region Properties
 
-
+        #region Modifier Keys
         KeyState _isControlPressed;
         public KeyState IsControlPressed
         {
@@ -110,27 +111,29 @@ namespace P42.Uno.HardwareKeys
                 }
             }
         }
+        #endregion
 
+        bool _isActive;
         public bool IsActive
         {
-            get => (UIElement)FocusManager.GetFocusedElement() == (UIElement)_platformCoreElement;
+            get => _isActive; 
             set
             {
-                if (value != IsActive)
+                if (value != _isActive)
                 {
+                    _isActive= value;
                     if (value)
-                        _platformCoreElement.Focus(FocusState.Programmatic);
-                    else
-                    {
-                        _tryingToDeactivate = true;
-                        FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                    }
+                        //this.Focus(FocusState.Programmatic);
+                        TryFocusAsync(this, FocusState.Programmatic);
                 }
             }
         }
 
         public bool MuteModifiers { get; set; } = true;
 
+        public bool IsTabToMoveFocusEnabled { get; set; }
+
+        public bool GreedyFocus { get; set; } = true;
 
         VirtualKey[] CurrentModifiers
         {
@@ -162,6 +165,8 @@ namespace P42.Uno.HardwareKeys
         #region Fields
         bool _tryingToDeactivate;
         Control _platformCoreElement;
+        Control _lastFocusedControl;
+        Control _tryingToFocusControl;
         #endregion
 
 
@@ -184,7 +189,6 @@ namespace P42.Uno.HardwareKeys
             PlatformBuild();
             FocusManager.GotFocus += FocusManager_GotFocus;
             FocusManager.LosingFocus += FocusManager_LosingFocus;
-
         }
 
         #endregion
@@ -200,6 +204,7 @@ namespace P42.Uno.HardwareKeys
         partial void PlatformMenuPressedQuery();
         partial void PlatformNumLockQuery();
         partial void PlatformCapsLockQuery();
+
         #endregion
 
         #region Virtual Methods
@@ -210,27 +215,69 @@ namespace P42.Uno.HardwareKeys
         protected virtual void OnNumLockStateChanged() { }
         protected virtual void OnCapsLockStateChanged() { }
 
+        async Task<FocusMovementResult> TryFocusAsync(Control control, FocusState state)
+        {
+            _tryingToFocusControl = control;
+            var result = await FocusManager.TryFocusAsync(control, state);
+            _tryingToFocusControl = null;
+            return result;
+        }
+
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
-            => HardwareKeyDown?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+        {
+            
+            if (IsTabToMoveFocusEnabled &&
+                virtualKey == VirtualKey.Tab &&
+                !modifiers.HasNonToggleModifier()
+               )
+            {
+                if (FocusManager.FindNextFocusableElement(FocusNavigationDirection.Next) is Control control &&
+                    control.IsTextEditable())
+                    //control.Focus(FocusState.Keyboard);
+                    TryFocusAsync(control, FocusState.Keyboard);
+                else
+                    //_lastFocusedControl?.Focus(FocusState.Keyboard);
+                    TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
+                return;
+            }
+            
+
+            HardwareKeyDown?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+        }
 
         protected virtual void OnSimpleKeyUp(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
-            => HardwareKeyUp?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+        {
+            /*
+            if (IsTabToMoveFocusEnabled &&
+                virtualKey == VirtualKey.Tab &&
+                !modifiers.HasNonToggleModifier()
+               )
+            {
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+                return;
+            }
+            */
+
+            HardwareKeyUp?.Invoke(this, new UnoKeyEventArgs(simpleKey, virtualKey, modifiers ?? CurrentModifiers));
+        }
 
         #endregion
 
-
-        string GetNameFor(object x)
+        void Reset()
         {
-            var name = x?.GetType().ToString() ?? "null";
-
-            if (x is FrameworkElement element && !string.IsNullOrWhiteSpace(element.Name))
-                name = element.Name;
-
-            return name;
+            IsShiftPressed = KeyState.Unknown;
+            IsControlPressed = KeyState.Unknown;
+            IsWindowsPressed = KeyState.Unknown;
+            IsMenuPressed = KeyState.Unknown;
+            IsCapsLockEngaged = KeyState.Unknown;
+#if !__IOS__
+            IsNumLockEngaged = KeyState.Unknown;
+#endif
         }
 
-        private void FocusManager_GotFocus(object sender, FocusManagerGotFocusEventArgs e)
+        private async void FocusManager_GotFocus(object sender, FocusManagerGotFocusEventArgs e)
         {
+
             //System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({GetNameFor(sender)}, {GetNameFor(e.NewFocusedElement)})");
             if (e.NewFocusedElement == _platformCoreElement)
             {
@@ -243,43 +290,65 @@ namespace P42.Uno.HardwareKeys
                 PlatformCapsLockQuery();
                 PlatformNumLockQuery();
             }
+            else if (IsActive)
+            {
+                if (e.NewFocusedElement == default || (GreedyFocus && !((Control)e.NewFocusedElement).IsTextEditable()))
+                    await TryFocusAsync(this, FocusState.Keyboard);
+            }
+            else
+            {
+                if (e.NewFocusedElement == this)
+                    Focus(FocusState.Unfocused);
+                else if (e.NewFocusedElement == _platformCoreElement)
+                    _platformCoreElement.Focus(FocusState.Unfocused);
+            }
+                
+
         }
 
         private void FocusManager_LosingFocus(object sender, LosingFocusEventArgs e)
         {
+            if (e.OldFocusedElement is Control control && 
+                control != this && 
+                control != _platformCoreElement &&
+                control.IsTextEditable()
+                )
+                _lastFocusedControl = control;
+
             //System.Diagnostics.Debug.WriteLine($"LosingFocus: ENTER sender:[{GetNameFor(sender)}] old:{GetNameFor(e.OldFocusedElement)} new:{GetNameFor(e.NewFocusedElement)} state:{e.FocusState} inDev:{e.InputDevice}");
+            if (IsActive)
+            {
+                if (e.OldFocusedElement == _platformCoreElement)
+                {
+                    if
+                    (
+                        e.NewFocusedElement == default ||
+                        ( GreedyFocus && _tryingToFocusControl is null )
+                    )
+                    {
+                        //if (!e.TryCancel())  // not working in iOS?
+                            TryFocusAsync(_platformCoreElement, FocusState.Programmatic);
+                        return;
+                    }
+                }
+                else if (e.OldFocusedElement != null && e.NewFocusedElement == this)
+                    Reset();
+            }
+            /*
             if (!_tryingToDeactivate && e.OldFocusedElement == _platformCoreElement)
             {
                 //System.Diagnostics.Debug.WriteLine($"LosingFocus: A");
                 e.TryCancel();
             }
             else
-            {
-                //System.Diagnostics.Debug.WriteLine($"LosingFocus: B");
-                IsShiftPressed = KeyState.Unknown;
-                IsControlPressed = KeyState.Unknown;
-                IsWindowsPressed = KeyState.Unknown;
-                IsMenuPressed = KeyState.Unknown;
-                IsCapsLockEngaged = KeyState.Unknown;
-#if !__IOS__
-                IsNumLockEngaged = KeyState.Unknown;
-#endif
-            }
-
+                Reset();
+            */
             _tryingToDeactivate = false;
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine($"OnLostFocus");
-            IsShiftPressed = KeyState.Unknown;
-            IsControlPressed = KeyState.Unknown;
-            IsWindowsPressed = KeyState.Unknown;
-            IsMenuPressed = KeyState.Unknown;
-            IsCapsLockEngaged = KeyState.Unknown;
-#if !__IOS__
-            IsNumLockEngaged = KeyState.Unknown;
-#endif
+            //Reset();
         }
 
 

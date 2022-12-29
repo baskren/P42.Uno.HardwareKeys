@@ -7,14 +7,14 @@
 
 	    <AssemblyName>P42.Uno.HardwareKeys.Wasm</AssemblyName>
 
-		<TargetFrameworks>net6.0;</TargetFrameworks>
+		<TargetFrameworks>net7.0;</TargetFrameworks>
 
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
 		
 	</PropertyGroup>
 
 	<!-- .NetStandard (WASM, GtK, Skia, etc)) -->
-    <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net6.0')) ">
+    <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net7.0')) ">
 		<Compile Include="**\*.netstandard.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.netstandard.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>

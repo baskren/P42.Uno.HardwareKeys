@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "P42.Uno.HardwareKeys.Demo.Windows": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"P42.Uno.HardwareKeys.Demo.Windows (Package)": {
+			"commandName": "MsixPackage"
+		},
+		"P42.Uno.HardwareKeys.Demo.Windows (Unpackaged)": {
+			"commandName": "Project"
+		}
+	}
+}

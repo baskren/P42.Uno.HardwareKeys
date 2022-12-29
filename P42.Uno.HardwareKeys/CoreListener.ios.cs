@@ -27,7 +27,7 @@ namespace P42.Uno.HardwareKeys
         private void OnShown(object sender, UIKeyboardEventArgs e)
         {
             // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
-            IsActive = false;
+            //IsActive = false;
         }
 
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)

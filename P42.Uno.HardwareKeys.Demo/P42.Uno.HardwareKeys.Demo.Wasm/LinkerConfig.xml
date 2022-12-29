@@ -1,4 +1,4 @@
-﻿<linker>
+<linker>
   <assembly fullname="P42.Uno.HardwareKeys.Demo.Wasm" />
   <assembly fullname="Uno.UI" />
   <assembly fullname="Microsoft.Extensions.Options" />
