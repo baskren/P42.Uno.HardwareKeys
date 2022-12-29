@@ -6,14 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:utu="clr-namespace:Uno.Toolkit.UI;assembly=Uno.Toolkit.UI"
+    xmlns:utu="clr-namespace:Uno.Toolkit.UI;assembly=Uno.Toolkit.WinUI"
     xmlns:hk="using:P42.Uno.HardwareKeys"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid 
         x:Name="_grid" 
         RowSpacing="3" 
-        utu:SafeArea="Left,Top,Right,Bottom"
         Margin="3">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />

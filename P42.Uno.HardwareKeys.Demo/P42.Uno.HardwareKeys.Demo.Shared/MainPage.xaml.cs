@@ -38,6 +38,10 @@ namespace P42.Uno.HardwareKeys.Demo
 
             UpdateModifiers(null, false);
 
+#if !WINDOWS
+            // Had to do this because utu namespace isn't working in WinUI3 target
+            global::Uno.Toolkit.UI.SafeArea.SetInsets(_grid, global::Uno.Toolkit.UI.SafeArea.InsetMask.All);
+#endif
         }
 
 

@@ -10,6 +10,7 @@
 		<PublishProfile>win10-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+		<DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -34,7 +35,6 @@
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.196" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
 		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.0.1" />
-		<PackageReference Include="Uno.Toolkit.WinUI" Version="2.4.2" />
 
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
