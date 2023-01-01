@@ -124,7 +124,7 @@ namespace P42.Uno.HardwareKeys
                     _isActive= value;
                     if (value)
                         //this.Focus(FocusState.Programmatic);
-                        TryFocusAsync(this, FocusState.Programmatic);
+                        TryFocusAsync(this, FocusState.Programmatic).Forget();
                 }
             }
         }
@@ -163,7 +163,6 @@ namespace P42.Uno.HardwareKeys
 
 
         #region Fields
-        bool _tryingToDeactivate;
         Control _platformCoreElement;
         Control _lastFocusedControl;
         Control _tryingToFocusControl;
@@ -234,7 +233,7 @@ namespace P42.Uno.HardwareKeys
                     //_lastFocusedControl?.Focus(FocusState.Keyboard);
                     await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
             }
-            catch (Exception e) 
+            catch (Exception) 
             {
                 if (_lastFocusedControl != null)
                     await TryFocusAsync(_lastFocusedControl, FocusState.Keyboard);
@@ -246,7 +245,7 @@ namespace P42.Uno.HardwareKeys
         {
             if (!IsActive)
             {
-                MoveFocusToEditable();
+                MoveFocusToEditable().Forget();
                 return;
             }
 
@@ -255,7 +254,7 @@ namespace P42.Uno.HardwareKeys
                 !modifiers.HasNonToggleModifier()
                )
             {
-                MoveFocusToEditable();
+                MoveFocusToEditable().Forget();
                 return;
             }
             
@@ -338,23 +337,13 @@ namespace P42.Uno.HardwareKeys
                     )
                     {
                         //if (!e.TryCancel())  // not working in iOS?
-                            TryFocusAsync(_platformCoreElement, FocusState.Programmatic);
+                            TryFocusAsync(_platformCoreElement, FocusState.Programmatic).Forget();
                         return;
                     }
                 }
                 else if (e.OldFocusedElement != null && e.NewFocusedElement == this)
                     Reset();
             }
-            /*
-            if (!_tryingToDeactivate && e.OldFocusedElement == _platformCoreElement)
-            {
-                //System.Diagnostics.Debug.WriteLine($"LosingFocus: A");
-                e.TryCancel();
-            }
-            else
-                Reset();
-            */
-            _tryingToDeactivate = false;
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)

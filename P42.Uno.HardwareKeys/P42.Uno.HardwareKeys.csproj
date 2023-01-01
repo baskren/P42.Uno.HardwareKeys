@@ -7,20 +7,14 @@
 
 	    <AssemblyName>P42.Uno.HardwareKeys</AssemblyName>
 
-	    <!--
-		    Another example of how Micrsoft just doesn't care about those who don't use only their stuff
-		  <TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
-		<TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
-	    -->
 		<TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0-windows10.0.19041.0;net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
-		<!--
+
 	    <TargetFrameworks Condition=" $(SolutionName.Contains('.iOS')) ">net7.0-ios</TargetFrameworks>
     	<TargetFrameworks Condition=" $(SolutionName.Contains('.macOS')) ">net7.0-macos</TargetFrameworks>
     	<TargetFrameworks Condition=" $(SolutionName.Contains('.GtK')) ">net7.0</TargetFrameworks>
     	<TargetFrameworks Condition=" $(SolutionName.Contains('.WPF')) ">net7.0</TargetFrameworks>
     	<TargetFrameworks Condition=" $(SolutionName.Contains('.Windows')) ">net7.0-windows10.0.19041.0</TargetFrameworks>
--->
 
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
@@ -30,58 +24,51 @@
 
 	<!-- ANDROID -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('android')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
 		<Compile Include="**\*.droid.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.droid.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- IOS -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
 		<Compile Include="**\*.ios.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.ios.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- MACOS -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
-	  <PackageReference Include="Uno.WinUI" Version="4.6.39" />
-	  <Compile Include="**\*.mac.cs" Exclude="$(DefaultItemExcludes)" />
+		<Compile Include="**\*.mac.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.mac.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- MacCatylst -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
 		<Compile Include="**\*.maccatylst.cs" />
 		<Compile Include="**\*.maccatylst.*.cs" />
 	</ItemGroup>  
 
 	<!-- TIZEN -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
 		<Compile Include="**\*.tizen.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.tizen.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
-	<!-- UWP -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('uap10.0')) ">
-		<Compile Include="**\*.uwp.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.uwp.*.cs" Exclude="$(DefaultItemExcludes)" />
-	</ItemGroup>
-
-  <!-- WinUI Windows -->
-  <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
-		<Compile Include="**\*.uwp.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.uwp.*.cs" Exclude="$(DefaultItemExcludes)" />
-  </ItemGroup>
-
 	<!-- .NetStandard (WASM, GtK, Skia, etc)) -->
-    <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net7.0')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
-		<Compile Include="**\*.netstandard.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.netstandard.*.cs" Exclude="$(DefaultItemExcludes)" />
+    <ItemGroup Condition=" $(TargetFramework.ToLower().Equals('net7.0')) ">
+		<Compile Include="**\*.net.cs" Exclude="$(DefaultItemExcludes)" />
+		<Compile Include="**\*.net.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
+	<!-- WinUI Windows -->
+	<ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
+		<Compile Include="**\*.win.cs" Exclude="$(DefaultItemExcludes)" />
+		<Compile Include="**\*.win.*.cs" Exclude="$(DefaultItemExcludes)" />
+	</ItemGroup>
+
+	<!-- Not Windows -->
+	<ItemGroup Condition=" !$(TargetFramework.Contains('windows')) ">
+		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
+	    <Compile Include="**\*.uno.cs" />
+	</ItemGroup>
 
 </Project>
