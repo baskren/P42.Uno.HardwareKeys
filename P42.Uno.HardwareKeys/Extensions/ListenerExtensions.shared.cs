@@ -13,7 +13,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnHardwareKeyDown(this Listener listener, EventHandler<UnoKeyEventArgs> handler)
+        public static Listener AddHardwareKeyDownHandler(this Listener listener, EventHandler<UnoKeyEventArgs> handler)
         { listener.HardwareKeyDown += handler; return listener; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnHardwareKeyUp(this Listener listener, EventHandler<UnoKeyEventArgs> handler)
+        public static Listener AddHardwareKeyUpHandler(this Listener listener, EventHandler<UnoKeyEventArgs> handler)
         { listener.HardwareKeyUp += handler; return listener; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsCapsLockEnabledChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsCapsLockEnabledChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsCapsLockEngagedChanged += handler; return listener; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsShiftPressedChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsShiftPressedChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsShiftPressedChanged += handler; return listener; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsControlPressedChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsControlPressedChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsControlPressedChanged += handler; return listener; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsWindowsPressedChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsWindowsPressedChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsWindowsPressedChanged += handler; return listener; }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsMenuPressedChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsMenuPressedChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsMenuPressedChanged += handler; return listener; }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace P42.Uno.HardwareKeys
         /// <param name="listener">a HardwareKeys.Listener instance</param>
         /// <param name="handler">an event handler</param>
         /// <returns></returns>
-        public static Listener AddOnIsNumLockEnabledChanged(this Listener listener, EventHandler<KeyState> handler)
+        public static Listener AddIsNumLockEnabledChangedHandler(this Listener listener, EventHandler<KeyState> handler)
         { listener.IsNumLockEngagedChanged += handler; return listener; }
 
         /// <summary>
