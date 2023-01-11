@@ -28,6 +28,18 @@ namespace P42.Uno.HardwareKeys
         {
             // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
             //IsActive = false;
+#if __IOS__
+            if (IsActive)
+            {
+                var focused = FocusManager.GetFocusedElement();
+
+                if (this == focused)
+                    UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+
+                IsActive = false;
+            }
+
+#endif
         }
 
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
