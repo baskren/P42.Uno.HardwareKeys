@@ -97,26 +97,64 @@ namespace P42.Uno.HardwareKeys
         /// <summary>
         /// Eguality test
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="other"></param>
+        /// <param name="sList"></param>
+        /// <param name="oList"></param>
         /// <returns></returns>
-        public static bool Equal(this VirtualKey[] source, VirtualKey[] other)
+        public static bool Equal(this IEnumerable<VirtualKey> source, IEnumerable<VirtualKey> other, IEnumerable<VirtualKey> ignore = null)
         {
-            var sourceEmpty = source is null || !source.Any();
-            var otherEmpty = other is null || !other.Any();
-            if (sourceEmpty && otherEmpty)
+
+            if (source.Empty() && other.Empty())
                 return true;
-            if (sourceEmpty != otherEmpty)
-                return false;
-            if (source.Length != other.Length)
-                return false;
-            for (int i = 0; i < source.Length; i++)
+
+            var sList = source?.ToList();
+            var oList = other?.ToList();
+
+            if (ignore != null)
             {
-                if (!other.Contains(source[i]))
+                foreach (var key in ignore)
+                {
+                    if (!sList.Empty())
+                        sList.TryRemove(key);
+
+                    if (!oList.Empty()) 
+                        oList.TryRemove(key);
+
+                }
+            }
+
+            if (sList.Empty() != oList.Empty())
+                return false;
+
+            if (sList.Count != oList.Count)
+                return false;
+
+            for (int i = 0; i < sList.Count; i++)
+            {
+                if (!oList.Contains(sList[i]))
                     return false;
             }
+
             return true;
 
+        }
+
+        static bool Empty(this IEnumerable<VirtualKey> list)
+        {
+            if (list is null)
+                return true;
+
+            return !list.Any();
+        }
+
+        static bool TryRemove(this ICollection<VirtualKey> list, VirtualKey key)
+        {
+            if (list.Contains(key))
+            {
+                list.Remove(key);
+                return true;
+            }
+
+            return false;
         }
 
 #if __ANDROID__
