@@ -67,7 +67,7 @@
 
 	<!-- Not Windows -->
 	<ItemGroup Condition=" !$(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.6.39" />
+		<PackageReference Include="Uno.WinUI" Version="4.7.37" />
 	    <Compile Include="**\*.uno.cs" />
 	</ItemGroup>
 
