@@ -103,22 +103,15 @@ namespace P42.Uno.HardwareKeys
         public static bool Equal(this IEnumerable<VirtualKey> source, IEnumerable<VirtualKey> other, IEnumerable<VirtualKey> ignore = null)
         {
 
-            if (source.Empty() && other.Empty())
-                return true;
-
-            var sList = source?.ToList();
-            var oList = other?.ToList();
+            var sList = source?.ToList() ?? new List<VirtualKey>();
+            var oList = other?.ToList() ?? new List<VirtualKey>();
 
             if (ignore != null)
             {
                 foreach (var key in ignore)
                 {
-                    if (!sList.Empty())
-                        sList.TryRemove(key);
-
-                    if (!oList.Empty()) 
-                        oList.TryRemove(key);
-
+                    sList.TryRemove(key);
+                    oList.TryRemove(key);
                 }
             }
 

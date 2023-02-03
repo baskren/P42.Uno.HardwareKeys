@@ -42,31 +42,42 @@ namespace P42.Uno.HardwareKeys
 #endif
         }
 
+        (VirtualKey, string) MapUiKey(UIKey uiKey)
+        {
+            var text = uiKey.Characters;
+            var key = uiKey.KeyCode.AsVirtualKey();
+
+            if (IsNumLockEngaged == KeyState.False && (uiKey.ModifierFlags & UIKeyModifierFlags.NumericPad) != 0)
+            {
+                switch (key)
+                {
+                    case VirtualKey.NumberPad0: key = VirtualKey.Insert; text = String.Empty; break;
+                    case VirtualKey.Decimal: key = VirtualKey.Delete; text = String.Empty; break;
+                    case VirtualKey.NumberPad1: key = VirtualKey.End; text = String.Empty; break;
+                    case VirtualKey.NumberPad2: key = VirtualKey.Down; text = String.Empty; break;
+                    case VirtualKey.NumberPad3: key = VirtualKey.PageDown; text = String.Empty; break;
+                    case VirtualKey.NumberPad4: key = VirtualKey.Left; text = String.Empty; break;
+                    case VirtualKey.NumberPad5: key = VirtualKey.Clear; text = String.Empty; break;
+                    case VirtualKey.NumberPad6: key = VirtualKey.Right; text = String.Empty; break;
+                    case VirtualKey.NumberPad7: key = VirtualKey.Home; text = String.Empty; break;
+                    case VirtualKey.NumberPad8: key = VirtualKey.Up; text = String.Empty; break;
+                    case VirtualKey.NumberPad9: key = VirtualKey.PageUp; text = String.Empty; break;
+                }
+            }
+
+            // make sure we have uniform handling across all platforms
+            if (text.Length == 1 && char.IsControl(text[0]))
+                text = string.Empty;
+
+            return (key, text);
+        }
+
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
         {
             if (presses.ToArray().FirstOrDefault()?.Key is UIKey uiKey)
             {
-                var text = uiKey.Characters;
-                var key = uiKey.KeyCode.AsVirtualKey();
+                var (key, text) = MapUiKey(uiKey);
 
-                if (IsNumLockEngaged == KeyState.False && (uiKey.ModifierFlags & UIKeyModifierFlags.NumericPad) != 0)
-                {
-                    switch (key)
-                    {
-                        case VirtualKey.NumberPad0: key = VirtualKey.Insert; text = String.Empty; break;
-                        case VirtualKey.Decimal: key = VirtualKey.Delete; text = String.Empty; break;
-                        case VirtualKey.NumberPad1: key = VirtualKey.End; text = String.Empty; break;
-                        case VirtualKey.NumberPad2: key = VirtualKey.Down; text = String.Empty; break;
-                        case VirtualKey.NumberPad3: key = VirtualKey.PageDown; text = String.Empty; break;
-                        case VirtualKey.NumberPad4: key = VirtualKey.Left; text = String.Empty; break;
-                        case VirtualKey.NumberPad5: key = VirtualKey.Clear; text = String.Empty; break;
-                        case VirtualKey.NumberPad6: key = VirtualKey.Right; text = String.Empty; break;
-                        case VirtualKey.NumberPad7: key = VirtualKey.Home; text = String.Empty; break;
-                        case VirtualKey.NumberPad8: key = VirtualKey.Up; text = String.Empty; break;
-                        case VirtualKey.NumberPad9: key = VirtualKey.PageUp; text = String.Empty; break;
-                    }
-                }
-                    
                 SyncModifiers(uiKey);
 
                 if (ProcessModifier(key, true))
@@ -84,27 +95,8 @@ namespace P42.Uno.HardwareKeys
         {
             if (presses.ToArray().FirstOrDefault()?.Key is UIKey uiKey)
             {
-                var text = uiKey.Characters;
-                var key = uiKey.KeyCode.AsVirtualKey();
                 var modifiers = CurrentModifiers;
-
-                if (IsNumLockEngaged == KeyState.False && (uiKey.ModifierFlags & UIKeyModifierFlags.NumericPad) != 0)
-                {
-                    switch (key)
-                    {
-                        case VirtualKey.NumberPad0: key = VirtualKey.Insert; text = String.Empty; break;
-                        case VirtualKey.Decimal: key = VirtualKey.Delete; text = String.Empty; break;
-                        case VirtualKey.NumberPad1: key = VirtualKey.End; text = String.Empty; break;
-                        case VirtualKey.NumberPad2: key = VirtualKey.Down; text = String.Empty; break;
-                        case VirtualKey.NumberPad3: key = VirtualKey.PageDown; text = String.Empty; break;
-                        case VirtualKey.NumberPad4: key = VirtualKey.Left; text = String.Empty; break;
-                        case VirtualKey.NumberPad5: key = VirtualKey.Clear; text = String.Empty; break;
-                        case VirtualKey.NumberPad6: key = VirtualKey.Right; text = String.Empty; break;
-                        case VirtualKey.NumberPad7: key = VirtualKey.Home; text = String.Empty; break;
-                        case VirtualKey.NumberPad8: key = VirtualKey.Up; text = String.Empty; break;
-                        case VirtualKey.NumberPad9: key = VirtualKey.PageUp; text = String.Empty; break;
-                    }
-                }
+                var (key, text) = MapUiKey(uiKey);
 
                 if (ProcessModifier(key, false))
                 {
