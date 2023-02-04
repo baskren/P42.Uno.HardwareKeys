@@ -14,21 +14,80 @@ using Microsoft.UI.Xaml.Media;
 
 namespace P42.Uno.HardwareKeys
 {
-    partial class CoreListener : TextBox
+    partial class CoreListener : Button
     {
         void PlatformBuild()
         {
             Name = "HardwareKeys.CoreListener";
             _platformCoreElement = this;
-            UIKeyboard.Notifications.ObserveWillShow(OnShown);
+            //UIKeyboard.Notifications.ObserveWillShow(OnShown);
             IsNumLockEngaged = KeyState.True;
+
+            //KeyDown += CoreListener_KeyDown;
+            //KeyUp += CoreListener_KeyUp;
+
+            /*
             IsSpellCheckEnabled = false;
             IsTextPredictionEnabled = false;
             CharacterCasing = CharacterCasing.Normal;
             PreventKeyboardDisplayOnProgrammaticFocus = true;
+
+            ResetContent();
+            //TextChanged += CoreListener_TextChanged;
+            BeforeTextChanging += CoreListener_BeforeTextChanging; ;
+            */
         }
 
-        
+        /*
+        private void CoreListener_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine($"CoreListener.TextChanging [{Text}] -> NewText[{args.NewText}] ");
+            args.Cancel = true;
+
+            UIKey key = null;
+            if (args.NewText.Length == 0)
+
+            Select(1, 0);
+        }
+
+        void ResetContent()
+        {
+            Text = "Ⓐ";
+            Select(1, 0);
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            ResetContent();
+            base.OnGotFocus(e);
+        }
+
+        private void CoreListener_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"CoreListener.KeyUp : {e.Key} ");
+        }
+
+        private void CoreListener_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"CoreListener.KeyDown : {e.Key} ");
+        }
+        */
+
+        protected override void OnKeyUp(KeyRoutedEventArgs args)
+        {
+            //System.Diagnostics.Debug.WriteLine($"CoreListener.OnKeyUp   : VirtualKey:[{args.Key}] OriginalKey[{args.OriginalKey}] OriginalSource[{args.OriginalSource}]  ");
+            ProcessVirtualKeyUp(args.Key);
+            base.OnKeyUp(args);
+        }
+
+        protected override void OnKeyDown(KeyRoutedEventArgs args)
+        {
+            //System.Diagnostics.Debug.WriteLine($"CoreListener.OnKeyDown : VirtualKey:[{args.Key}] OriginalKey[{args.OriginalKey}] OriginalSource[{args.OriginalSource}]  ");
+            ProcessVirtualKeyDown(args.Key);
+            base.OnKeyDown(args);
+        }
+
+        /*
         private void OnShown(object sender, UIKeyboardEventArgs e)
         {
             // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
@@ -46,7 +105,7 @@ namespace P42.Uno.HardwareKeys
 
 #endif
         }
-
+        */
         (VirtualKey, string) MapUiKey(UIKey uiKey)
         {
             var text = uiKey.Characters;
@@ -77,21 +136,61 @@ namespace P42.Uno.HardwareKeys
             return (key, text);
         }
 
+
+        string KeyToText(VirtualKey key)
+        {
+            switch (key)
+            {
+                case VirtualKey.Tab:
+                    return "\t";
+                case VirtualKey.Delete:
+                    return "\b";
+            }
+            var text = key.ToString();
+
+            if (text.Length == 1 && !CurrentModifiers.Contains(VirtualKey.Shift))
+                return text.ToLower();
+
+            text = text.Replace("NumberPad", "").Replace("Number", "");
+
+            return text;
+        }
+
+
+        void ProcessVirtualKeyDown(VirtualKey key)
+        {
+
+
+            if (ProcessModifier(key, true))
+            {
+                if (!MuteModifiers)
+                    OnSimpleKeyDown(KeyToText(key), key);
+            }
+            else
+                OnSimpleKeyDown(KeyToText(key), key);
+        }
+
+        void ProcessVirtualKeyUp(VirtualKey key)
+        {
+            var modifiers = CurrentModifiers;
+            if (ProcessModifier(key, false))
+            {
+                if (!MuteModifiers)
+                    OnSimpleKeyUp(KeyToText(key), key, modifiers);
+            }
+            else
+                OnSimpleKeyUp(KeyToText(key), key, modifiers);
+
+        }
+
+        /*
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
         {
             if (presses.ToArray().FirstOrDefault()?.Key is UIKey uiKey)
             {
                 var (key, text) = MapUiKey(uiKey);
-
                 SyncModifiers(uiKey);
-
-                if (ProcessModifier(key, true))
-                {
-                    if (!MuteModifiers)
-                        OnSimpleKeyDown(text, key);
-                }
-                else
-                    OnSimpleKeyDown(text, key);
+                ProcessVirtualKeyDown(key, text);
             }
         }
 
@@ -113,9 +212,8 @@ namespace P42.Uno.HardwareKeys
             }
 
             // Do we need fat finger support?
-            Text = String.Empty;
+            //Text = String.Empty;
         }
-
 
         void SyncModifiers(UIKey uiKey)
         {
@@ -148,5 +246,6 @@ namespace P42.Uno.HardwareKeys
                     flags.Add(flag);
             //System.Diagnostics.Debug.WriteLine($"[{uiKey.KeyCode}] Modifiers: [{string.Join(",", flags)}]");
         }
+        */
     }
 }

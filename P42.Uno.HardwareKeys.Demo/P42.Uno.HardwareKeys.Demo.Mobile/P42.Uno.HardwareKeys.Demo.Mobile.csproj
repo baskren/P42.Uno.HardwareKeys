@@ -1,39 +1,75 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-		<TargetFrameworks>net7.0-android</TargetFrameworks>
-		<TargetFrameworks>$(TargetFrameworks);net7.0-ios</TargetFrameworks>
-		<TargetFrameworks>$(TargetFrameworks);net7.0-maccatalyst</TargetFrameworks>
 
-		<!-- Disabled because of https://github.com/xamarin/xamarin-macios/issues/16401--><!--
-		<TargetFrameworks>$(TargetFrameworks);net7.0-macos</TargetFrameworks>
-		--><SingleProject>true</SingleProject><OutputType>Exe</OutputType><!-- Debugger workaround https://github.com/dotnet/maui-samples/blob/8aa6b8780b12e97b157514c3bdc54bb4a13001cd/HelloMacCatalyst/HelloMacCatalyst.csproj#L7 --><!-- <MtouchExtraArgs Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">$(MtouchExtraArgs) -setenv:MONO_THREADS_SUSPEND=preemptive</MtouchExtraArgs> --><!-- Required for C# Hot Reload, except for macOS which uses CoreCLR (not Mono) --><!-- Disabled because of https://github.com/dotnet/runtime/issues/68808 --><!--<UseInterpreter Condition="'$(Configuration)' == 'Debug' and '$(TargetFramework)' != 'net7.0-maccatalyst' and '$(TargetFramework)' != 'net7.0-macos'">True</UseInterpreter>--><IsUnoHead>true</IsUnoHead><SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-ios'">14.2</SupportedOSPlatformVersion><SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">14.0</SupportedOSPlatformVersion><SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-android'">21.0</SupportedOSPlatformVersion><SupportedOSPlatformVersion Condition="'$(TargetFramework)'=='net7.0-macos'">10.14</SupportedOSPlatformVersion></PropertyGroup>
+  <PropertyGroup>
+    <!--
+		<TargetFrameworks>net7.0-android</TargetFrameworks>
+		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net7.0-macos</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios</TargetFrameworks>
+    -->
+		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
+
+  	</PropertyGroup>
+
+  <PropertyGroup>
+    <SingleProject>true</SingleProject>
+    <OutputType>Exe</OutputType>
+    <!-- Display name -->
+    <ApplicationTitle>H﹠A Calc</ApplicationTitle>
+    <!-- App Identifier -->
+    <ApplicationId>org.awc.heightsandareas</ApplicationId>
+    <ApplicationIdGuid>B15B88A9-972F-4D46-AF57-E7D06730EAB9</ApplicationIdGuid>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.2.7.1</ApplicationDisplayVersion>
+    <ApplicationVersion>2301120</ApplicationVersion>
+    <IsUnoHead>true</IsUnoHead>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-ios'">14.2</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-macos'">10.14</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(RuntimeIdentifier)'==''">
     <!-- Default values for command line builds -->
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-ios'">iossimulator-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-macos'">osx-x64</RuntimeIdentifier>
   </PropertyGroup>
+
+
+
   <ItemGroup>
-    <PackageReference Include="Uno.Toolkit.WinUI" Version="2.4.2" />
     <PackageReference Include="Uno.WinUI" Version="4.7.37" />
     <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.7.37" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.7.37" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Uno.WinUI.Lottie" Version="4.7.37" />
+    <PackageReference Include="Uno.Toolkit.WinUI" Version="2.4.2" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\P42.Uno.HardwareKeys\P42.Uno.HardwareKeys.csproj" />
   </ItemGroup>
+
   <Choose>
+
+    <!-- ANDROID :(  -->
     <When Condition="'$(TargetFramework)'=='net7.0-android'">
+      <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <!-- Workaround for .NET Android issue https://github.com/xamarin/xamarin-android/issues/7736 -->
+        <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
+      </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.4" />
         <PackageReference Include="Uno.UniversalImageLoader" Version="1.9.36" />
+        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.0.3" />
       </ItemGroup>
       <ItemGroup>
         <AndroidEnvironment Include="Android/environment.conf" />
       </ItemGroup>
     </When>
+
+    <!-- iOS  -->
     <When Condition="'$(TargetFramework)'=='net7.0-ios'">
       <PropertyGroup Condition="'$(TargetFramework)'=='net7.0-ios'">
         <MtouchExtraArgs>$(MtouchExtraArgs) --setenv=MONO_GC_PARAMS=soft-heap-limit=512m,nursery-size=64m,evacuation-threshold=66,major=marksweep,concurrent-sweep</MtouchExtraArgs>
@@ -41,11 +77,18 @@
         <MtouchExtraArgs>$(MtouchExtraArgs) --registrar:static</MtouchExtraArgs>
         <!-- https://github.com/xamarin/xamarin-macios/issues/14812 -->
         <MtouchExtraArgs>$(MtouchExtraArgs) --marshal-objectivec-exceptions:disable</MtouchExtraArgs>
+
+        <ProvisioningType>manual</ProvisioningType>
+        <CodesignKey>Apple Distribution: American Wood Council (YCKL85L863)</CodesignKey>
+        <CodesignProvision>ADHOC AWC Heights and Areas</CodesignProvision>
+
       </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
       </ItemGroup>
     </When>
+
+    <!-- MacCatalyst -->
     <When Condition="'$(TargetFramework)'=='net7.0-maccatalyst'">
       <PropertyGroup>
         <!-- Configure the GC -->
@@ -61,10 +104,16 @@
         <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
       </ItemGroup>
     </When>
+
+    <!-- MacOS -->
     <When Condition="'$(TargetFramework)'=='net7.0-macos'">
-      <PropertyGroup>
-      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
+      </ItemGroup>
     </When>
-  </Choose>
+
+	</Choose>
+
+
   <Import Project="..\P42.Uno.HardwareKeys.Demo.Shared\P42.Uno.HardwareKeys.Demo.Shared.projitems" Label="Shared" />
 </Project>

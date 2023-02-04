@@ -346,10 +346,12 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
+        /*
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             //Reset();
         }
+        */
 
 
         bool ProcessModifier(VirtualKey key, bool down)

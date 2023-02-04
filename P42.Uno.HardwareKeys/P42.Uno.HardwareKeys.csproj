@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<!-- IOS -->
-	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
+	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) ">
 		<Compile Include="**\*.ios.cs" Exclude="$(DefaultItemExcludes)" />
 		<Compile Include="**\*.ios.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
@@ -40,10 +40,10 @@
 		<Compile Include="**\*.mac.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
-	<!-- MacCatylst -->
+	<!-- maccatalyst -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-		<Compile Include="**\*.maccatylst.cs" />
-		<Compile Include="**\*.maccatylst.*.cs" />
+		<Compile Include="**\*.maccatalyst.cs" />
+		<Compile Include="**\*.maccatalyst.*.cs" />
 	</ItemGroup>  
 
 	<!-- TIZEN -->
