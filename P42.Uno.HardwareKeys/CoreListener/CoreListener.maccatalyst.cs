@@ -139,27 +139,23 @@ namespace P42.Uno.HardwareKeys
 
         string KeyToText(VirtualKey key)
         {
-            switch (key)
-            {
-                case VirtualKey.Tab:
-                    return "\t";
-                case VirtualKey.Delete:
-                    return "\b";
-            }
             var text = key.ToString();
-
             if (text.Length == 1 && !CurrentModifiers.Contains(VirtualKey.Shift))
                 return text.ToLower();
 
             text = text.Replace("NumberPad", "").Replace("Number", "");
 
-            return text;
+            if (text.Length == 1)
+                return text;
+
+            return null;
         }
 
 
         void ProcessVirtualKeyDown(VirtualKey key)
         {
-
+            if (key == VirtualKey.Delete)
+                key = VirtualKey.Back;
 
             if (ProcessModifier(key, true))
             {
