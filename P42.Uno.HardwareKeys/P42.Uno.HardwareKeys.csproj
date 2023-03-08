@@ -69,7 +69,7 @@
 
 	<!-- Not Windows -->
 	<ItemGroup Condition=" !$(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.7.37" />
+		<PackageReference Include="Uno.WinUI" Version="4.7.44" />
 	    <Compile Include="**\*.uno.cs" />
 	</ItemGroup>
 
@@ -81,7 +81,7 @@
 
 	<!-- WASM -->
 	<ItemGroup Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">
-		<PackageReference Include="Uno.WinUI.WebAssembly" Version="4.7.37" />
+		<PackageReference Include="Uno.WinUI.WebAssembly" Version="4.7.44" />
 
 		<Compile Include="**\*.wasm.cs" />
 		<Compile Include="**\*.wasm.*.cs" />
