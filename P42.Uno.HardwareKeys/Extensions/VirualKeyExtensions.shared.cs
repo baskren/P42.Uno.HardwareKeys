@@ -97,8 +97,9 @@ namespace P42.Uno.HardwareKeys
         /// <summary>
         /// Eguality test
         /// </summary>
-        /// <param name="sList"></param>
-        /// <param name="oList"></param>
+        /// <param name="source">First list of VirtualKeys</param>
+        /// <param name="other">Second list of VirtualKeys</param>
+        /// <param name="ignore">VirutalKeys to ignore</param>
         /// <returns></returns>
         public static bool Equal(this IEnumerable<VirtualKey> source, IEnumerable<VirtualKey> other, IEnumerable<VirtualKey> ignore = null)
         {
