@@ -307,9 +307,9 @@ namespace P42.Uno.HardwareKeys
             }
             else
             {
-                if (e.NewFocusedElement == this)
+                if (e.NewFocusedElement == this && IsFocusEngaged)
                     Focus(FocusState.Unfocused);
-                else if (e.NewFocusedElement == _platformCoreElement)
+                else if (e.NewFocusedElement == _platformCoreElement && _platformCoreElement.IsFocusEngaged)
                     _platformCoreElement.Focus(FocusState.Unfocused);
             }
                 
