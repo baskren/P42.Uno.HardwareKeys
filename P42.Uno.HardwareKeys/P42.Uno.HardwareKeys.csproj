@@ -1,91 +1,88 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
-	<!--
-	Adding project references to this project requires some manual adjustments.
-	Please see https://github.com/unoplatform/uno/issues/3909 for more details.
-	-->
+
 	<PropertyGroup>
-
 	    <AssemblyName>P42.Uno.HardwareKeys</AssemblyName>
+	    <RootNamespace>P42.Uno.HardwareKeys</RootNamespace>
+	    <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
+  	</PropertyGroup>
 
-		<TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
-		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0-windows10.0.18362;net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
+  	<!-- NUGET PACKAGE GENERATION -->
+  	<PropertyGroup Condition=" $(P42LocalNuGet) != '' AND !$(P42TargetPlatform.ToLower().Contains('android')) AND !$(P42TargetPlatform.ToLower().Contains('ios')) AND !$(P42TargetPlatform.ToLower().Contains('mac')) AND !$(P42TargetPlatform.ToLower().Contains('windows')) AND !$(P42TargetPlatform.ToLower().Contains('tizen')) ">
+    	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    	<Version>4.7.44</Version>
+    	<PackageId Condition=" $(P42TargetPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
+        <!--
+        Force all projects of this folder to use a different output
+        path to avoid intermediate output collisions
+        -->
+  	    <BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
+  	    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+  	    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+    
+  	    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  	    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  	    <IncludeSymbols>true</IncludeSymbols>
+  	    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-		<!-- Ensures the .xr.xml files are generated in a proper layout folder -->
-		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+        <SynchReleaseVersion>false</SynchReleaseVersion>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Authors>Ben Askren</Authors>
+        <Company>42nd Parallel, LLC</Company>
+        <Description>Enabled hardware key input for Uno platform applications</Description>
+        <Copyright>2022, 42nd Parallel</Copyright>
+        <PackageProjectUrl>https://github.com/baskren/P42.Uno.HardwareKeys</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/baskren/P42.Uno.HardwareKeys</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIcon>P42.icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Uno.Platform Uno keyboard</PackageTags>
+    </PropertyGroup>
 
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.android')) ">net7.0-android</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.ios')) ">net7.0-ios</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.macos')) ">net7.0-macos</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">net7.0-macos</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.gtk')) ">net7.0</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.wpf')) ">net7.0</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.windows')) ">net7.0-windows10.0.18362</TargetFrameworks>
-
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">
-    <TargetFrameworks>net7.0</TargetFrameworks>
-    <DefineConstants>__WASM__;$(DefineConstants);</DefineConstants>
-    <P42TargetPlatform>wasm</P42TargetPlatform>
-  </PropertyGroup>
+  	<!-- SHARED RESOURCES -->
+	<ItemGroup>
+        <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 
 	<!-- ANDROID -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('android')) ">
-		<Compile Include="**\*.droid.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.droid.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- IOS -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) ">
-		<Compile Include="**\*.ios.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.ios.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- MACOS -->
-  <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
-		<Compile Include="**\*.mac.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.mac.*.cs" Exclude="$(DefaultItemExcludes)" />
+	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
 	</ItemGroup>
 
 	<!-- maccatalyst -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-		<Compile Include="**\*.maccatalyst.cs" />
-		<Compile Include="**\*.maccatalyst.*.cs" />
 	</ItemGroup>  
 
 	<!-- TIZEN -->
 	<ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
-		<Compile Include="**\*.tizen.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.tizen.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- WinUI Windows -->
 	<ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
-		<Compile Include="**\*.win.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.win.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- Not Windows -->
 	<ItemGroup Condition=" !$(TargetFramework.Contains('windows')) ">
-		<PackageReference Include="Uno.WinUI" Version="4.7.44" />
-	    <Compile Include="**\*.uno.cs" />
 	</ItemGroup>
 
 	<!-- .NetStandard Bait -->
 	<ItemGroup Condition=" !$(P42TargetPlatform.ToLower().Contains('wasm')) AND $(TargetFramework.ToLower().Equals('net7.0')) ">
-		<Compile Include="**\*.net.cs" Exclude="$(DefaultItemExcludes)" />
-		<Compile Include="**\*.net.*.cs" Exclude="$(DefaultItemExcludes)" />
 	</ItemGroup>
 
 	<!-- WASM -->
 	<ItemGroup Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">
 		<PackageReference Include="Uno.WinUI.WebAssembly" Version="4.7.44" />
-
-		<Compile Include="**\*.wasm.cs" />
-		<Compile Include="**\*.wasm.*.cs" />
-
 	</ItemGroup>
 
 </Project>
