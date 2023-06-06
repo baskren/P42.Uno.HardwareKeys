@@ -188,6 +188,48 @@ namespace P42.Uno.HardwareKeys
             PlatformBuild();
             FocusManager.GotFocus += FocusManager_GotFocus;
             FocusManager.LosingFocus += FocusManager_LosingFocus;
+            FocusManager.LostFocus += FocusManager_LostFocus;
+        }
+
+        #endregion
+
+
+        #region IDisposable Support
+
+        bool _disposed;
+#if !HAS_UNO
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+#else
+        public new void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            base.Dispose();
+        }
+#endif
+
+#if __ANDROID__ 
+        protected override void Dispose(bool disposing)
+#elif __MACOS__ || __IOS__
+        protected virtual new void Dispose(bool disposing)
+#else
+        protected virtual void Dispose(bool disposing)
+#endif
+        {
+            if (disposing && !_disposed)
+            {
+                _disposed = true;
+                FocusManager.GotFocus -= FocusManager_GotFocus;
+                FocusManager.LosingFocus -= FocusManager_LosingFocus;
+                FocusManager.LostFocus -= FocusManager_LostFocus;
+            }
+#if __ANDROID__ || __MACOS__ || __IOS__
+            base.Dispose(disposing);
+#endif
         }
 
         #endregion
@@ -286,8 +328,10 @@ namespace P42.Uno.HardwareKeys
         {
 
             //System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({GetNameFor(sender)}, {GetNameFor(e.NewFocusedElement)})");
+            
             if (e.NewFocusedElement == _platformCoreElement)
             {
+                // We are now focused on our platform specific keyboard listener element!
                 PlatformGotFocus();
                 // Don't do the following here!  If using Menu to toggle between apps, this could create a false trigger!
                 //PlatformShiftPressedQuery();
@@ -299,14 +343,18 @@ namespace P42.Uno.HardwareKeys
             }
             else if (IsActive)
             {
+                // We're wrongly focused on something else besides the platform specific keyboard listener element.
                 if (e.NewFocusedElement == this)
+                    // We're focused on the CoreListener element - which means we're actually focused on the platform specific listener element
                     return;
 
                 if (e.NewFocusedElement == default || (GreedyFocus && !((Control)e.NewFocusedElement).IsTextEditable()))
+                    // Yikes!  We're focused on something else - and it's not a text editable element - so let's get the focus back!
                     await TryFocusAsync(this, FocusState.Keyboard);
             }
             else
             {
+                // we're not supposed to have focus - so let's just assure we don't
                 if (e.NewFocusedElement == this && IsFocusEngaged)
                     Focus(FocusState.Unfocused);
                 else if (e.NewFocusedElement == _platformCoreElement && _platformCoreElement.IsFocusEngaged)
@@ -316,10 +364,21 @@ namespace P42.Uno.HardwareKeys
 
         }
 
+        LosingFocusEventArgs losingFocusEventArgs;
         private void FocusManager_LosingFocus(object sender, LosingFocusEventArgs e)
         {
-            if (e.OldFocusedElement is Control control && 
-                control != this && 
+            losingFocusEventArgs = e;
+
+        }
+
+        private void FocusManager_LostFocus(object sender, FocusManagerLostFocusEventArgs e)
+        {
+            if (e.OldFocusedElement != losingFocusEventArgs?.OldFocusedElement)
+                return;
+
+            // who is losing focus?
+            if (e.OldFocusedElement is Control control &&
+                control != this &&
                 control != _platformCoreElement &&
                 control.IsTextEditable()
                 )
@@ -330,28 +389,20 @@ namespace P42.Uno.HardwareKeys
             {
                 if (e.OldFocusedElement == _platformCoreElement)
                 {
-                    if
-                    (
-                        e.NewFocusedElement == default ||
-                        ( GreedyFocus && _tryingToFocusControl is null )
-                    )
+                    // hey!  We're supposed to have focus!
+                    if (losingFocusEventArgs?.NewFocusedElement == default || (GreedyFocus && _tryingToFocusControl is null))
                     {
                         //if (!e.TryCancel())  // not working in iOS?
-                            TryFocusAsync(_platformCoreElement, FocusState.Programmatic).Forget();
+                        TryFocusAsync(_platformCoreElement, FocusState.Programmatic).Forget();
                         return;
                     }
                 }
-                else if (e.OldFocusedElement != null && e.NewFocusedElement == this)
+                else if (e.OldFocusedElement != null && losingFocusEventArgs?.NewFocusedElement == this)
                     Reset();
             }
+
         }
 
-        /*
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            //Reset();
-        }
-        */
 
 
         bool ProcessModifier(VirtualKey key, bool down)

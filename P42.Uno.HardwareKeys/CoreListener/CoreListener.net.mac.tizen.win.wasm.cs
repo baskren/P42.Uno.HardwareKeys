@@ -44,8 +44,8 @@ namespace P42.Uno.HardwareKeys
             _textBox.Name = "HardwareKeys.CoreListener";
             _textBox.TextChanged += _textBox_TextChanged;
             _textBox.Foreground = new SolidColorBrush(Color.FromArgb(1, 128, 128, 128));
-
         }
+
 
 
         partial void PlatformNumLockQuery()
@@ -72,7 +72,7 @@ namespace P42.Uno.HardwareKeys
             base.OnGotFocus(e);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             //FocusManager.TryFocusAsync(_textBox, FocusState.Programmatic);
-            TryFocusAsync(_textBox, FocusState.Programmatic);
+            TryFocusAsync(_textBox, FocusState.Programmatic).Forget();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
