@@ -8,33 +8,27 @@
 
   	<!-- NUGET PACKAGE GENERATION -->
 	<PropertyGroup Condition=" $(P42_LocalNuGetFolderPath) != '' AND  '$(OS)' == 'Windows_NT'  AND !$(P42_TargetOnlyThisPlatform.ToLower().Contains('android')) AND !$(P42_TargetOnlyThisPlatform.ToLower().Contains('ios')) AND !$(P42_TargetOnlyThisPlatform.ToLower().Contains('mac')) AND !$(P42_TargetOnlyThisPlatform.ToLower().Contains('windows')) AND !$(P42_TargetOnlyThisPlatform.ToLower().Contains('tizen')) ">
-    	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
     	<Version>4.9.26</Version>
     	<PackageId Condition=" $(P42_TargetOnlyThisPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
-        <!--
-        Force all projects of this folder to use a different output
-        path to avoid intermediate output collisions
-        -->
-  	    <BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
-  	    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-  	    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
-    
+
   	    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   	    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   	    <IncludeSymbols>true</IncludeSymbols>
   	    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-        <SynchReleaseVersion>false</SynchReleaseVersion>
+	    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally> 
+
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Authors>Ben Askren</Authors>
         <Company>42nd Parallel, LLC</Company>
         <Description>Enabled hardware key input for Uno platform applications</Description>
         <Copyright>2022, 42nd Parallel</Copyright>
         <PackageProjectUrl>https://github.com/baskren/P42.Uno.HardwareKeys</PackageProjectUrl>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/baskren/P42.Uno.HardwareKeys</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <PackageIcon>P42.icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>Uno.Platform Uno keyboard</PackageTags>
