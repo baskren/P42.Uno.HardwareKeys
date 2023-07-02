@@ -81,7 +81,7 @@ namespace P42.Uno.HardwareKeys
             }
         }
 
-        KeyState _numLockEngaged;
+        KeyState _numLockEngaged = KeyState.Unknown;
         public KeyState IsNumLockEngaged
         {
             get => _numLockEngaged;

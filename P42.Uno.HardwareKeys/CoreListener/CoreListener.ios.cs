@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 
+#pragma warning disable CA1422 // Valzidate platform compatibility
 namespace P42.Uno.HardwareKeys
 {
     partial class CoreListener : TextBox
@@ -152,5 +153,8 @@ namespace P42.Uno.HardwareKeys
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility
+
 
 #endif
+
