@@ -11,7 +11,6 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Input;
 using System.Threading.Tasks;
-using P42.Utils;
 
 namespace P42.Uno.HardwareKeys
 {

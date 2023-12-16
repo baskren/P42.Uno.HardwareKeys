@@ -3,7 +3,7 @@
 
   <!-- SHARED REFERENCES -->
   <ItemGroup>
-  	<PackageReference Include="P42.Utils.Uno" Version="5.0.64" />
+  	<PackageReference Include="P42.Serilog.QuickLog" Version="1.0.8" />
   </ItemGroup>
   <!-- PLATFORM SPECIFIC REFERENCES -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
