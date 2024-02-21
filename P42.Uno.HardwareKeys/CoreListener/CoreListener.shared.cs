@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -197,7 +197,7 @@ namespace P42.Uno.HardwareKeys
         #region IDisposable Support
 
         bool _disposed;
-#if !HAS_UNO
+#if WINDOWS
         public void Dispose()
         {
             Dispose(true);
