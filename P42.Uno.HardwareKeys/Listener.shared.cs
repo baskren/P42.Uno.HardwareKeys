@@ -78,6 +78,12 @@ namespace P42.Uno.HardwareKeys
             get => _coreListener.IsTabToMoveFocusEnabled;
             set => _coreListener.IsTabToMoveFocusEnabled = value;
         }
+
+        public bool FocusManually
+        {
+            get => _coreListener.FocusManually;
+            set => _coreListener.FocusManually = value;
+        }
         #endregion
 
 

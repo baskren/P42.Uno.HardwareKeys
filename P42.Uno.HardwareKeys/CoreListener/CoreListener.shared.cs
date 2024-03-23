@@ -121,8 +121,11 @@ namespace P42.Uno.HardwareKeys
             {
                 if (value != _isActive)
                 {
-                    _isActive= value;
-                    if (value)
+                    if (FocusManually)
+                        _isActive = false;
+                    else
+                        _isActive= value;
+                    if (_isActive)
                         //this.Focus(FocusState.Programmatic);
                         TryFocusAsync(this, FocusState.Programmatic).Forget();
                 }
@@ -134,6 +137,20 @@ namespace P42.Uno.HardwareKeys
         public bool IsTabToMoveFocusEnabled { get; set; }
 
         public bool GreedyFocus { get; set; } = true;
+
+        bool _focusManually;
+        public bool FocusManually 
+        { 
+            get => _focusManually;
+            set
+            {
+                if (_focusManually != value)
+                {
+                    _isActive = false;
+                    _focusManually = value;
+                }
+            }
+        }
 
         VirtualKey[] CurrentModifiers
         {
@@ -285,7 +302,7 @@ namespace P42.Uno.HardwareKeys
 
         protected virtual void OnSimpleKeyDown(string simpleKey, VirtualKey virtualKey, VirtualKey[] modifiers = null)
         {
-            if (!IsActive)
+            if (!IsActive && !FocusManually)
             {
                 MoveFocusToEditable().Forget();
                 return;
@@ -328,7 +345,7 @@ namespace P42.Uno.HardwareKeys
         {
 
             //System.Diagnostics.Debug.WriteLine($"FocusManager_GotFocus({GetNameFor(sender)}, {GetNameFor(e.NewFocusedElement)})");
-            
+
             if (e.NewFocusedElement == _platformCoreElement)
             {
                 // We are now focused on our platform specific keyboard listener element!
@@ -341,6 +358,8 @@ namespace P42.Uno.HardwareKeys
                 PlatformCapsLockQuery();
                 PlatformNumLockQuery();
             }
+            else if (FocusManually)
+                return;
             else if (IsActive)
             {
                 // We're wrongly focused on something else besides the platform specific keyboard listener element.
@@ -385,6 +404,15 @@ namespace P42.Uno.HardwareKeys
                 _lastFocusedControl = control;
 
             //System.Diagnostics.Debug.WriteLine($"LosingFocus: ENTER sender:[{GetNameFor(sender)}] old:{GetNameFor(e.OldFocusedElement)} new:{GetNameFor(e.NewFocusedElement)} state:{e.FocusState} inDev:{e.InputDevice}");
+
+            if (FocusManually)
+            {
+                if (e.OldFocusedElement != _platformCoreElement && losingFocusEventArgs?.NewFocusedElement == this)
+                    Reset();
+
+                return;
+            }
+
             if (IsActive)
             {
                 if (e.OldFocusedElement == _platformCoreElement)

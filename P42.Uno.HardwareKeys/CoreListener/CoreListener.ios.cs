@@ -37,7 +37,7 @@ namespace P42.Uno.HardwareKeys
             // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
             //IsActive = false;
 #if __IOS__
-            if (IsActive)
+            if (IsActive || FocusManually)
             {
                 var focused = FocusManager.GetFocusedElement();
 

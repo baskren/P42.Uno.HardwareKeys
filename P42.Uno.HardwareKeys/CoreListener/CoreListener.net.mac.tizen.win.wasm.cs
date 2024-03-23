@@ -42,11 +42,10 @@ namespace P42.Uno.HardwareKeys
         {
             Content = _platformCoreElement = _textBox = new TextBox();
             _textBox.Name = "HardwareKeys.CoreListener";
-            _textBox.TextChanged += _textBox_TextChanged;
+            //_textBox.TextChanged += _textBox_TextChanged;
+            _textBox.BeforeTextChanging += _textBox_BeforeTextChanging;
             _textBox.Foreground = new SolidColorBrush(Color.FromArgb(1, 128, 128, 128));
         }
-
-
 
         partial void PlatformNumLockQuery()
             => IsNumLockEngaged = WinUIKeyEngaged(VirtualKey.NumberKeyLock, CoreVirtualKeyStates.Locked);
@@ -79,15 +78,16 @@ namespace P42.Uno.HardwareKeys
         
 
         readonly Dictionary<VirtualKey, string> FatFingerBuffer = new Dictionary<VirtualKey, string>();
-        private void _textBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void _textBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            if (_waitingForText && !string.IsNullOrEmpty(_textBox.Text))
+            if (_waitingForText && !string.IsNullOrEmpty(args.NewText))
             {
-                var key = _textBox.Text.Substring(_textBox.Text.Length - 1);
-                FatFingerBuffer[_lastKeyDown] = key;
-                OnSimpleKeyDown(key, _lastKeyDown);
+                //var key = _textBox.Text.Substring(_textBox.Text.Length - 1);
+                FatFingerBuffer[_lastKeyDown] = args.NewText;
+                OnSimpleKeyDown(args.NewText, _lastKeyDown);
                 _lastKeyDown = VirtualKey.None;
             }
+            args.Cancel = true;
         }
 
         VirtualKey _lastKeyDown;
@@ -139,7 +139,7 @@ namespace P42.Uno.HardwareKeys
             else
                 OnSimpleKeyUp(key, e.Key, modifiers);
 
-            _textBox.Text = String.Empty;
+            //_textBox.Text = String.Empty;
         }
 
     }
