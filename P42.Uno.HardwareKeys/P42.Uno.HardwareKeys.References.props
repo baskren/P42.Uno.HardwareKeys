@@ -6,7 +6,7 @@
   
   <!-- SHARED REFERENCES -->
   <ItemGroup>
-  	<PackageReference Include="P42.Serilog.QuickLog" Version="1.0.8" />
+  	<PackageReference Include="P42.Serilog.QuickLog" Version="1.0.9" />
   </ItemGroup>
   <!-- PLATFORM SPECIFIC REFERENCES -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
