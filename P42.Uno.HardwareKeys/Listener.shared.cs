@@ -180,44 +180,6 @@ namespace P42.Uno.HardwareKeys
         #endregion
 
 
-        #region IDisposable Support
-
-        bool _disposed;
-#if WINDOWS
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-#else
-        public new void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-            base.Dispose();
-        }
-#endif
-
-#if __ANDROID__ 
-        protected override void Dispose(bool disposing)
-#elif __MACOS__ || __IOS__
-        protected virtual new void Dispose(bool disposing)
-#else
-        protected virtual void Dispose(bool disposing)
-#endif
-        {
-            if (disposing && !_disposed)
-            {
-                _disposed = true;
-                _coreListener?.Dispose();
-            }
-#if __ANDROID__ || __MACOS__ || __IOS__
-            base.Dispose(disposing);
-#endif
-        }
-
-        #endregion
-
 
     }
 }
