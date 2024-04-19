@@ -54,7 +54,7 @@ namespace P42.Uno.HardwareKeys.Demo
             }
 #endif
 
-#if NET7_0 && WINDOWS
+#if NET7_0_OR_GREATER && WINDOWS
             _window = new Window();
             _window.Activate();
 #else
@@ -81,7 +81,7 @@ namespace P42.Uno.HardwareKeys.Demo
                 _window.Content = rootFrame;
             }
 
-#if !(NET7_0 && WINDOWS)
+#if !(NET7_0_OR_GREATER && WINDOWS)
             if (args.PrelaunchActivated == false)
 #endif
             {
