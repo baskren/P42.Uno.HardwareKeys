@@ -1,3 +1,11 @@
+/*******************************************************************
+ *
+ * Common source for .net bait, mac, tizen, windows, wasm, and skia
+ *
+ * IF YOU MAKE A CHANGE HERE, BE SURE TO UPDATE ALL OF THE ABOVE!
+ *
+ **********************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
