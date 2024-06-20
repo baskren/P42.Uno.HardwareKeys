@@ -191,7 +191,9 @@ namespace P42.Uno.HardwareKeys
         public event EventHandler<KeyState> IsShiftPressedChanged;
         public event EventHandler<KeyState> IsWindowsPressedChanged;
         public event EventHandler<KeyState> IsMenuPressedChanged;
+#pragma warning disable CS0067
         public event EventHandler<KeyState> IsNumLockEngagedChanged;
+#pragma warning restore CS0067
         public event EventHandler<KeyState> IsCapsLockEngagedChanged;
         public event EventHandler<UnoKeyEventArgs> HardwareKeyDown;
         public event EventHandler<UnoKeyEventArgs> HardwareKeyUp;
