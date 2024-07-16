@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "P42.Uno.HardwareKeys.Demo",
+  "display": "standalone",
+  "name": "P42.Uno.HardwareKeys.Demo",
+  "short_name": "P42.Uno.HardwareKeys.Demo",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}
