@@ -138,7 +138,7 @@ namespace P42.Uno.HardwareKeys
 
         public bool GreedyFocus { get; set; } = true;
 
-        bool _focusManually;
+        bool _focusManually = true;
         public bool FocusManually 
         { 
             get => _focusManually;
