@@ -6,97 +6,96 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Data;
 
-namespace P42.Uno.HardwareKeys
+namespace P42.Uno.HardwareKeys;
+
+internal class FuncConverter<TSource, TDest, TParam> : IValueConverter
 {
-	class FuncConverter<TSource, TDest, TParam> : IValueConverter
-	{
-		readonly Func<TSource, TDest> convert;
-		readonly Func<TDest, TSource> convertBack;
+    private readonly Func<TSource, TDest> convert;
+    private readonly Func<TDest, TSource> convertBack;
 
-		readonly Func<TSource, TParam, TDest> convertWithParam;
-		readonly Func<TDest, TParam, TSource> convertBackWithParam;
+    private readonly Func<TSource, TParam, TDest> convertWithParam;
+    private readonly Func<TDest, TParam, TSource> convertBackWithParam;
 
-		readonly Func<TSource, TParam, string, TDest> convertWithParamAndLanguage;
-		readonly Func<TDest, TParam, string, TSource> convertBackWithParamAndLanguage;
+    private readonly Func<TSource, TParam, string, TDest> convertWithParamAndLanguage;
+    private readonly Func<TDest, TParam, string, TSource> convertBackWithParamAndLanguage;
 
-		public FuncConverter(Func<TSource, TParam, string, TDest> convertWithParamAndLanguate = null, Func<TDest, TParam, string, TSource> convertBackWithParamAndCulture = null)
-		{ this.convertWithParamAndLanguage = convertWithParamAndLanguate; this.convertBackWithParamAndLanguage = convertBackWithParamAndCulture; }
+    public FuncConverter(Func<TSource, TParam, string, TDest> convertWithParamAndLanguate = null, Func<TDest, TParam, string, TSource> convertBackWithParamAndCulture = null)
+    { convertWithParamAndLanguage = convertWithParamAndLanguate; convertBackWithParamAndLanguage = convertBackWithParamAndCulture; }
 
-		public FuncConverter(Func<TSource, TParam, TDest> convertWithParam = null, Func<TDest, TParam, TSource> convertBackWithParam = null)
-		{ this.convertWithParam = convertWithParam; this.convertBackWithParam = convertBackWithParam; }
+    public FuncConverter(Func<TSource, TParam, TDest> convertWithParam = null, Func<TDest, TParam, TSource> convertBackWithParam = null)
+    { this.convertWithParam = convertWithParam; this.convertBackWithParam = convertBackWithParam; }
 
-		public FuncConverter(Func<TSource, TDest> convert = null, Func<TDest, TSource> convertBack = null)
-		{ this.convert = convert; this.convertBack = convertBack; }
+    public FuncConverter(Func<TSource, TDest> convert = null, Func<TDest, TSource> convertBack = null)
+    { this.convert = convert; this.convertBack = convertBack; }
 
-		public object Convert(object value, Type targetType, object parameter, string language)
-		{
-			if (convert != null)
-				return convert.Invoke(
-					value != null ? (TSource)value : default(TSource));
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if (convert != null)
+            return convert.Invoke(
+                value != null ? (TSource)value : default(TSource));
 
-			if (convertWithParam != null)
-				return convertWithParam.Invoke(
-					value != null ? (TSource)value : default(TSource),
-					parameter != null ? (TParam)parameter : default(TParam));
+        if (convertWithParam != null)
+            return convertWithParam.Invoke(
+                value != null ? (TSource)value : default(TSource),
+                parameter != null ? (TParam)parameter : default(TParam));
 
-			if (convertWithParamAndLanguage != null)
-				return convertWithParamAndLanguage.Invoke(
-					value != null ? (TSource)value : default(TSource),
-					parameter != null ? (TParam)parameter : default(TParam),
-					language);
+        if (convertWithParamAndLanguage != null)
+            return convertWithParamAndLanguage.Invoke(
+                value != null ? (TSource)value : default(TSource),
+                parameter != null ? (TParam)parameter : default(TParam),
+                language);
 
-			return default(TDest);
-		}
+        return default(TDest);
+    }
 
-		public object ConvertBack(object value, Type targetType, object parameter, string language)
-		{
-			if (convertBack != null)
-				return convertBack.Invoke(
-					value != null ? (TDest)value : default(TDest));
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    {
+        if (convertBack != null)
+            return convertBack.Invoke(
+                value != null ? (TDest)value : default(TDest));
 
-			if (convertBackWithParam != null)
-				return convertBackWithParam.Invoke(
-					value != null ? (TDest)value : default(TDest),
-					parameter != null ? (TParam)parameter : default(TParam));
+        if (convertBackWithParam != null)
+            return convertBackWithParam.Invoke(
+                value != null ? (TDest)value : default(TDest),
+                parameter != null ? (TParam)parameter : default(TParam));
 
-			if (convertBackWithParamAndLanguage != null)
-				return convertBackWithParamAndLanguage.Invoke(
-					value != null ? (TDest)value : default(TDest),
-					parameter != null ? (TParam)parameter : default(TParam),
-					language);
+        if (convertBackWithParamAndLanguage != null)
+            return convertBackWithParamAndLanguage.Invoke(
+                value != null ? (TDest)value : default(TDest),
+                parameter != null ? (TParam)parameter : default(TParam),
+                language);
 
-			return default(TSource);
-		}
-	}
+        return default(TSource);
+    }
+}
 
-	class FuncConverter<TSource, TDest> : FuncConverter<TSource, TDest, object>
-	{
-		public FuncConverter(Func<TSource, TDest> convert = null, Func<TDest, TSource> convertBack = null)
-			: base(convert, convertBack) { }
-	}
+internal class FuncConverter<TSource, TDest> : FuncConverter<TSource, TDest, object>
+{
+    public FuncConverter(Func<TSource, TDest> convert = null, Func<TDest, TSource> convertBack = null)
+        : base(convert, convertBack) { }
+}
 
-	class FuncConverter<TSource> : FuncConverter<TSource, object, object>
-	{
-		public FuncConverter(Func<TSource, object> convert = null, Func<object, TSource> convertBack = null)
-			: base(convert, convertBack) { }
-	}
+internal class FuncConverter<TSource> : FuncConverter<TSource, object, object>
+{
+    public FuncConverter(Func<TSource, object> convert = null, Func<object, TSource> convertBack = null)
+        : base(convert, convertBack) { }
+}
 
-	class FuncConverter : FuncConverter<object, object, object>
-	{
-		public FuncConverter(Func<object, object> convert = null, Func<object, object> convertBack = null)
-			: base(convert, convertBack) { }
-	}
+internal class FuncConverter : FuncConverter<object, object, object>
+{
+    public FuncConverter(Func<object, object> convert = null, Func<object, object> convertBack = null)
+        : base(convert, convertBack) { }
+}
 
-	class ToStringConverter : FuncConverter<object, string>
-	{
-		public ToStringConverter(string format = "{0}")
-			: base(o => string.Format(CultureInfo.InvariantCulture, format, o)) { }
-	}
+internal class ToStringConverter : FuncConverter<object, string>
+{
+    public ToStringConverter(string format = "{0}")
+        : base(o => string.Format(CultureInfo.InvariantCulture, format, o)) { }
+}
 
-	class NotConverter : FuncConverter<bool, bool>
-	{
-		static readonly Lazy<NotConverter> instance = new Lazy<NotConverter>(() => new NotConverter());
-		public static NotConverter Instance => instance.Value;
-		public NotConverter() : base(t => !t, t => !t) { }
-	}
+internal class NotConverter : FuncConverter<bool, bool>
+{
+    private static readonly Lazy<NotConverter> instance = new(() => new NotConverter());
+    public static NotConverter Instance => instance.Value;
+    public NotConverter() : base(t => !t, t => !t) { }
 }

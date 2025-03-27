@@ -17,9 +17,9 @@ using Microsoft.UI.Xaml.Media;
 #pragma warning disable CA1422 // Valzidate platform compatibility
 namespace P42.Uno.HardwareKeys
 {
-    partial class CoreListener : TextBox
+    internal partial class CoreListener : TextBox
     {
-        void PlatformBuild()
+        private void PlatformBuild()
         {
             Name = "HardwareKeys.CoreListener";
             _platformCoreElement = this;
@@ -50,7 +50,7 @@ namespace P42.Uno.HardwareKeys
 #endif
         }
 
-        (VirtualKey, string) MapUiKey(UIKey uiKey)
+        private (VirtualKey, string) MapUiKey(UIKey uiKey)
         {
             var text = uiKey.Characters;
             var key = uiKey.KeyCode.AsVirtualKey();
@@ -82,7 +82,7 @@ namespace P42.Uno.HardwareKeys
 
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
         {
-            if (presses.ToArray().FirstOrDefault()?.Key is UIKey uiKey)
+            if (presses.ToArray().FirstOrDefault()?.Key is { } uiKey)
             {
                 var (key, text) = MapUiKey(uiKey);
 
@@ -101,7 +101,7 @@ namespace P42.Uno.HardwareKeys
 
         public override void PressesEnded(NSSet<UIPress> presses, UIPressesEvent evt)
         {
-            if (presses.ToArray().FirstOrDefault()?.Key is UIKey uiKey)
+            if (presses.ToArray().FirstOrDefault()?.Key is { } uiKey)
             {
                 var modifiers = CurrentModifiers;
                 var (key, text) = MapUiKey(uiKey);
@@ -120,7 +120,7 @@ namespace P42.Uno.HardwareKeys
         }
 
 
-        void SyncModifiers(UIKey uiKey)
+        private void SyncModifiers(UIKey uiKey)
         {
             if (uiKey.KeyCode == UIKeyboardHidUsage.KeyboardCapsLock)
             {

@@ -1,23 +1,22 @@
 using System;
 
-namespace P42.Uno.HardwareKeys
+namespace P42.Uno.HardwareKeys;
+
+/// <summary>
+/// State of key engagement
+/// </summary>
+public enum KeyState
 {
     /// <summary>
-    /// State of key engagement
+    /// Key is NOT pressed/engaged
     /// </summary>
-    public enum KeyState
-    {
-        /// <summary>
-        /// Key is NOT pressed/engaged
-        /// </summary>
-        False,
-        /// <summary>
-        /// Key is pressed/engaged
-        /// </summary>
-        True,
-        /// <summary>
-        /// Cannot determine if key is pressed/engaged
-        /// </summary>
-        Unknown,
-    }
+    False,
+    /// <summary>
+    /// Key is pressed/engaged
+    /// </summary>
+    True,
+    /// <summary>
+    /// Cannot determine if key is pressed/engaged
+    /// </summary>
+    Unknown,
 }

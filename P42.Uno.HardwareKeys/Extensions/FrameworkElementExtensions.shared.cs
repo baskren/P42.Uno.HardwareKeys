@@ -13,56 +13,55 @@ using Microsoft.UI.Input;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace P42.Uno.HardwareKeys
+namespace P42.Uno.HardwareKeys;
+
+internal static class FrameworkExtensions
 {
-    static class FrameworkExtensions
+    public static bool IsTextEditable(this Control control)
     {
-        public static bool IsTextEditable(this Control control)
+        if (control == null)
+            return false;
+
+        if (!control.IsEnabled)
+            return false;
+
+        if (control.Visibility == Visibility.Collapsed) 
+            return false;
+
+        var type = control.GetType();
+
+        if (type.GetProperty("QueryText") is { } queryTextProperty &&
+            queryTextProperty.CanWrite)
+            return true;
+
+        if (type.GetProperty("Text") is { } textProperty &&
+            textProperty.CanWrite)
         {
-            if (control == null)
-                return false;
-
-            if (!control.IsEnabled)
-                return false;
-
-            if (control.Visibility == Visibility.Collapsed) 
-                return false;
-
-            var type = control.GetType();
-
-            if (type.GetProperty("QueryText") is PropertyInfo queryTextProperty &&
-                queryTextProperty.CanWrite)
-                return true;
-
-            if (type.GetProperty("Text") is PropertyInfo textProperty &&
-                textProperty.CanWrite)
+            if (type.GetProperty("IsReadOnly") is { } readOnlyProperty)
             {
-                if (type.GetProperty("IsReadOnly") is PropertyInfo readOnlyProperty)
+                if (readOnlyProperty.CanRead &&
+                    readOnlyProperty.PropertyType == typeof(bool))
                 {
-                    if (readOnlyProperty.CanRead &&
-                        readOnlyProperty.PropertyType == typeof(bool))
-                    {
-                        return !(bool)readOnlyProperty.GetValue(control);
-                    }
-                }
-
-                if (type.GetProperty("IsEditable") is PropertyInfo editableProperty &&
-                    editableProperty.CanRead &&
-                    editableProperty.PropertyType == typeof(bool))
-                {
-                    return (bool)editableProperty.GetValue(control);
-                }
-
-                if (type.GetProperty("IsTextSearchEnabled ") is PropertyInfo textSearchProperty &&
-                    textSearchProperty.CanRead &&
-                    textSearchProperty.PropertyType == typeof(bool))
-                {
-                    return (bool)textSearchProperty.GetValue(control);
+                    return !(bool)readOnlyProperty.GetValue(control);
                 }
             }
 
+            if (type.GetProperty("IsEditable") is { } editableProperty &&
+                editableProperty.CanRead &&
+                editableProperty.PropertyType == typeof(bool))
+            {
+                return (bool)editableProperty.GetValue(control);
+            }
 
-            return false;
+            if (type.GetProperty("IsTextSearchEnabled ") is { } textSearchProperty &&
+                textSearchProperty.CanRead &&
+                textSearchProperty.PropertyType == typeof(bool))
+            {
+                return (bool)textSearchProperty.GetValue(control);
+            }
         }
+
+
+        return false;
     }
 }

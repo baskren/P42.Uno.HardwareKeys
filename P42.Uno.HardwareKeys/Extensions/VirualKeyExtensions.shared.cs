@@ -10,157 +10,157 @@ using Android.Views;
 using UIKit;
 #endif
 
-namespace P42.Uno.HardwareKeys
+namespace P42.Uno.HardwareKeys;
+
+/// <summary>
+/// Extensions for Windows.System.VirtualKey
+/// </summary>
+public static class VirualKeyExtensions
 {
     /// <summary>
-    /// Extensions for Windows.System.VirtualKey
+    /// Is the key [Shift], [Control], [Menu], or [Windows]?
     /// </summary>
-    public static class VirualKeyExtensions
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public static bool IsNonToggleModifier(this VirtualKey key)
     {
-        /// <summary>
-        /// Is the key [Shift], [Control], [Menu], or [Windows]?
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static bool IsNonToggleModifier(this VirtualKey key)
+        switch (key)
         {
-            switch (key)
+            case VirtualKey.Shift:
+            case VirtualKey.LeftShift:
+            case VirtualKey.RightShift:
+            case VirtualKey.Control:
+            case VirtualKey.LeftControl:
+            case VirtualKey.RightControl:
+            case VirtualKey.Menu:
+            case VirtualKey.LeftMenu:
+            case VirtualKey.RightMenu:
+            case VirtualKey.LeftWindows:
+            case VirtualKey.RightWindows:
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Does a IEnumerable of VirtualKey have a Non-toggle modifier?
+    /// </summary>
+    /// <param name="keys"></param>
+    /// <returns></returns>
+    public static bool HasNonToggleModifier(this IEnumerable<VirtualKey> keys)
+        => keys?.Any(k => k.IsNonToggleModifier()) ?? false;
+
+    /// <summary>
+    /// Simplifies VirualKey to a more general interpretation
+    /// </summary>
+    /// <param name="key">VirtualKey</param>
+    /// <returns></returns>
+    internal static string Simplify(this VirtualKey key)
+    {
+        var txt = key.ToString();
+        if (txt.StartsWith("NumberPad"))
+            return txt["NumberPad".Length..];
+        if (txt.StartsWith("Number"))
+            return txt["Number".Length..];
+
+        switch(key)
+        {
+            case VirtualKey.None:
+                return string.Empty;
+            case VirtualKey.LeftWindows:
+            case VirtualKey.RightWindows:
+                return "Windows";
+            case VirtualKey.Add:
+                return "+";
+            case VirtualKey.Subtract:
+                return "-";
+            case VirtualKey.Multiply:
+                return "*";
+            case VirtualKey.Divide:
+                return "/";
+            case VirtualKey.Decimal:
+                return ".";
+            case VirtualKey.LeftShift:
+            case VirtualKey.RightShift:
+                return "Shift";
+            case VirtualKey.LeftControl:
+            case VirtualKey.RightControl:
+                return "Control";
+            case VirtualKey.LeftMenu:
+            case VirtualKey.RightMenu:
+                return "Menu";
+        }
+
+        return key.ToString();
+    }
+
+    /// <summary>
+    /// Eguality test
+    /// </summary>
+    /// <param name="source">First list of VirtualKeys</param>
+    /// <param name="other">Second list of VirtualKeys</param>
+    /// <param name="ignore">VirutalKeys to ignore</param>
+    /// <returns></returns>
+    public static bool Equal(this IEnumerable<VirtualKey> source, IEnumerable<VirtualKey> other, IEnumerable<VirtualKey> ignore = null)
+    {
+
+        var sList = source?.ToList() ?? [];
+        var oList = other?.ToList() ?? [];
+
+        if (ignore != null)
+        {
+            foreach (var key in ignore)
             {
-                case VirtualKey.Shift:
-                case VirtualKey.LeftShift:
-                case VirtualKey.RightShift:
-                case VirtualKey.Control:
-                case VirtualKey.LeftControl:
-                case VirtualKey.RightControl:
-                case VirtualKey.Menu:
-                case VirtualKey.LeftMenu:
-                case VirtualKey.RightMenu:
-                case VirtualKey.LeftWindows:
-                case VirtualKey.RightWindows:
-                    return true;
+                sList.TryRemove(key);
+                oList.TryRemove(key);
             }
+        }
+
+        if (sList.Empty() != oList.Empty())
             return false;
+
+        if (sList.Count != oList.Count)
+            return false;
+
+        for (var i = 0; i < sList.Count; i++)
+        {
+            if (!oList.Contains(sList[i]))
+                return false;
         }
 
-        /// <summary>
-        /// Does a IEnumerable of VirtualKey have a Non-toggle modifier?
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <returns></returns>
-        public static bool HasNonToggleModifier(this IEnumerable<VirtualKey> keys)
-            => keys?.Any(k => k.IsNonToggleModifier()) ?? false;
+        return true;
 
-        /// <summary>
-        /// Simplifies VirualKey to a more general interpretation
-        /// </summary>
-        /// <param name="key">VirtualKey</param>
-        /// <returns></returns>
-        internal static string Simplify(this VirtualKey key)
-        {
-            var txt = key.ToString();
-            if (txt.StartsWith("NumberPad"))
-                return txt.Substring("NumberPad".Length);
-            if (txt.StartsWith("Number"))
-                return txt.Substring("Number".Length);
+    }
 
-            switch(key)
-            {
-                case VirtualKey.None:
-                    return string.Empty;
-                case VirtualKey.LeftWindows:
-                case VirtualKey.RightWindows:
-                    return "Windows";
-                case VirtualKey.Add:
-                    return "+";
-                case VirtualKey.Subtract:
-                    return "-";
-                case VirtualKey.Multiply:
-                    return "*";
-                case VirtualKey.Divide:
-                    return "/";
-                case VirtualKey.Decimal:
-                    return ".";
-                case VirtualKey.LeftShift:
-                case VirtualKey.RightShift:
-                    return "Shift";
-                case VirtualKey.LeftControl:
-                case VirtualKey.RightControl:
-                    return "Control";
-                case VirtualKey.LeftMenu:
-                case VirtualKey.RightMenu:
-                    return "Menu";
-            }
-
-            return key.ToString();
-        }
-
-        /// <summary>
-        /// Eguality test
-        /// </summary>
-        /// <param name="source">First list of VirtualKeys</param>
-        /// <param name="other">Second list of VirtualKeys</param>
-        /// <param name="ignore">VirutalKeys to ignore</param>
-        /// <returns></returns>
-        public static bool Equal(this IEnumerable<VirtualKey> source, IEnumerable<VirtualKey> other, IEnumerable<VirtualKey> ignore = null)
-        {
-
-            var sList = source?.ToList() ?? new List<VirtualKey>();
-            var oList = other?.ToList() ?? new List<VirtualKey>();
-
-            if (ignore != null)
-            {
-                foreach (var key in ignore)
-                {
-                    sList.TryRemove(key);
-                    oList.TryRemove(key);
-                }
-            }
-
-            if (sList.Empty() != oList.Empty())
-                return false;
-
-            if (sList.Count != oList.Count)
-                return false;
-
-            for (int i = 0; i < sList.Count; i++)
-            {
-                if (!oList.Contains(sList[i]))
-                    return false;
-            }
-
+    private static bool Empty(this IEnumerable<VirtualKey> list)
+    {
+        if (list is null)
             return true;
 
-        }
+        return !list.Any();
+    }
 
-        static bool Empty(this IEnumerable<VirtualKey> list)
+    private static bool TryRemove(this ICollection<VirtualKey> list, VirtualKey key)
+    {
+        if (list.Contains(key))
         {
-            if (list is null)
-                return true;
-
-            return !list.Any();
+            list.Remove(key);
+            return true;
         }
 
-        static bool TryRemove(this ICollection<VirtualKey> list, VirtualKey key)
-        {
-            if (list.Contains(key))
-            {
-                list.Remove(key);
-                return true;
-            }
-
-            return false;
-        }
+        return false;
+    }
 
 #if __ANDROID__
 
         internal static VirtualKey AsVirtualKey(this Keycode keycode)
         {
-            if (KeyCodeMap.TryGetValue(keycode, out VirtualKey virtualKey))
+            if (KeyCodeMap.TryGetValue(keycode, out var virtualKey))
                 return virtualKey;
             return VirtualKey.None;
         }
 
-        readonly static Dictionary<Keycode, VirtualKey> KeyCodeMap = new Dictionary<Keycode, VirtualKey>
+        private static readonly Dictionary<Keycode, VirtualKey> KeyCodeMap = new()
         {
             { Keycode.Num0, VirtualKey.Number0 },
             { Keycode.Num1, VirtualKey.Number1 },
@@ -452,194 +452,193 @@ namespace P42.Uno.HardwareKeys
             //{ Keycode.ZoomOut, VirtualKey. },
         };
 #elif __IOS__
-        internal static VirtualKey AsVirtualKey(this UIKeyboardHidUsage keycode)
-        {
-            if (KeyCodeMap.TryGetValue(keycode, out VirtualKey virtualKey))
-                return virtualKey;
-            return VirtualKey.None;
-        }
-
-
-        readonly static Dictionary<UIKeyboardHidUsage, VirtualKey> KeyCodeMap = new Dictionary<UIKeyboardHidUsage, VirtualKey>
-        {
-            { UIKeyboardHidUsage.KeyboardA, VirtualKey.A },
-            { UIKeyboardHidUsage.KeyboardB, VirtualKey.B },
-            { UIKeyboardHidUsage.KeyboardC, VirtualKey.C },
-            { UIKeyboardHidUsage.KeyboardD, VirtualKey.D },
-            { UIKeyboardHidUsage.KeyboardE, VirtualKey.E },
-            { UIKeyboardHidUsage.KeyboardF, VirtualKey.F },
-            { UIKeyboardHidUsage.KeyboardG, VirtualKey.G },
-            { UIKeyboardHidUsage.KeyboardH, VirtualKey.H },
-            { UIKeyboardHidUsage.KeyboardI, VirtualKey.I },
-            { UIKeyboardHidUsage.KeyboardJ, VirtualKey.J },
-            { UIKeyboardHidUsage.KeyboardK, VirtualKey.K },
-            { UIKeyboardHidUsage.KeyboardL, VirtualKey.L },
-            { UIKeyboardHidUsage.KeyboardM, VirtualKey.M },
-            { UIKeyboardHidUsage.KeyboardN, VirtualKey.N },
-            { UIKeyboardHidUsage.KeyboardO, VirtualKey.O },
-            { UIKeyboardHidUsage.KeyboardP, VirtualKey.P },
-            { UIKeyboardHidUsage.KeyboardQ, VirtualKey.Q },
-            { UIKeyboardHidUsage.KeyboardR, VirtualKey.R },
-            { UIKeyboardHidUsage.KeyboardS, VirtualKey.S },
-            { UIKeyboardHidUsage.KeyboardT, VirtualKey.T },
-            { UIKeyboardHidUsage.KeyboardU, VirtualKey.U },
-            { UIKeyboardHidUsage.KeyboardV, VirtualKey.V },
-            { UIKeyboardHidUsage.KeyboardW, VirtualKey.W },
-            { UIKeyboardHidUsage.KeyboardX, VirtualKey.X },
-            { UIKeyboardHidUsage.KeyboardY, VirtualKey.Y },
-            { UIKeyboardHidUsage.KeyboardZ, VirtualKey.Z },
-            { UIKeyboardHidUsage.Keyboard1, VirtualKey.Number1 },
-            { UIKeyboardHidUsage.Keyboard2, VirtualKey.Number2 },
-            { UIKeyboardHidUsage.Keyboard3, VirtualKey.Number3 },
-            { UIKeyboardHidUsage.Keyboard4, VirtualKey.Number4 },
-            { UIKeyboardHidUsage.Keyboard5, VirtualKey.Number5 },
-            { UIKeyboardHidUsage.Keyboard6, VirtualKey.Number6 },
-            { UIKeyboardHidUsage.Keyboard7, VirtualKey.Number7 },
-            { UIKeyboardHidUsage.Keyboard8, VirtualKey.Number8 },
-            { UIKeyboardHidUsage.Keyboard9, VirtualKey.Number9 },
-            { UIKeyboardHidUsage.Keyboard0, VirtualKey.Number0 },
-            { UIKeyboardHidUsage.KeyboardReturnOrEnter, VirtualKey.Enter },
-            { UIKeyboardHidUsage.KeyboardEscape, VirtualKey.Escape },
-            { UIKeyboardHidUsage.KeyboardDeleteOrBackspace, VirtualKey.Back },
-            { UIKeyboardHidUsage.KeyboardTab, VirtualKey.Tab },
-            { UIKeyboardHidUsage.KeyboardSpacebar, VirtualKey.Space },
-            { UIKeyboardHidUsage.KeyboardHyphen, VirtualKey.Subtract },
-            //{ UIKeyboardHidUsage.KeyboardEqualSign, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardOpenBracket, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardCloseBracket, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardBackslash, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardNonUSPound, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardSemicolon, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardQuote, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardGraveAccentAndTilde, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardComma, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardPeriod, VirtualKey. }, // Is this .Decimal ???????  <<<<<<<<
-            //{ UIKeyboardHidUsage.KeyboardSlash, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardCapsLock, VirtualKey.CapitalLock },
-            { UIKeyboardHidUsage.KeyboardF1, VirtualKey.F1 },
-            { UIKeyboardHidUsage.KeyboardF2, VirtualKey.F2 },
-            { UIKeyboardHidUsage.KeyboardF3, VirtualKey.F3 },
-            { UIKeyboardHidUsage.KeyboardF4, VirtualKey.F4 },
-            { UIKeyboardHidUsage.KeyboardF5, VirtualKey.F5 },
-            { UIKeyboardHidUsage.KeyboardF6, VirtualKey.F6 },
-            { UIKeyboardHidUsage.KeyboardF7, VirtualKey.F7 },
-            { UIKeyboardHidUsage.KeyboardF8, VirtualKey.F8 },
-            { UIKeyboardHidUsage.KeyboardF9, VirtualKey.F9 },
-            { UIKeyboardHidUsage.KeyboardF10, VirtualKey.F10 },
-            { UIKeyboardHidUsage.KeyboardF11, VirtualKey.F11 },
-            { UIKeyboardHidUsage.KeyboardF12, VirtualKey.F12 },
-            { UIKeyboardHidUsage.KeyboardPrintScreen, VirtualKey.Print },
-            { UIKeyboardHidUsage.KeyboardScrollLock, VirtualKey.Scroll },
-            { UIKeyboardHidUsage.KeyboardPause, VirtualKey.Pause },
-            { UIKeyboardHidUsage.KeyboardInsert, VirtualKey.Insert },
-            { UIKeyboardHidUsage.KeyboardHome, VirtualKey.Home },
-            { UIKeyboardHidUsage.KeyboardPageUp, VirtualKey.PageUp },
-            { UIKeyboardHidUsage.KeyboardDeleteForward, VirtualKey.Delete },
-            { UIKeyboardHidUsage.KeyboardEnd, VirtualKey.End },
-            { UIKeyboardHidUsage.KeyboardPageDown, VirtualKey.PageDown },
-            { UIKeyboardHidUsage.KeyboardRightArrow, VirtualKey.Right },
-            { UIKeyboardHidUsage.KeyboardLeftArrow, VirtualKey.Left },
-            { UIKeyboardHidUsage.KeyboardDownArrow, VirtualKey.Down },
-            { UIKeyboardHidUsage.KeyboardUpArrow, VirtualKey.Up },
-            { UIKeyboardHidUsage.KeypadNumLock, VirtualKey.NumberKeyLock },
-            { UIKeyboardHidUsage.KeypadSlash, VirtualKey.Divide },
-            { UIKeyboardHidUsage.KeypadAsterisk, VirtualKey.Multiply },
-            { UIKeyboardHidUsage.KeypadHyphen, VirtualKey.Subtract },
-            { UIKeyboardHidUsage.KeypadPlus, VirtualKey.Add },
-            { UIKeyboardHidUsage.KeypadEnter, VirtualKey.Enter },
-            { UIKeyboardHidUsage.Keypad1, VirtualKey.NumberPad1 },
-            { UIKeyboardHidUsage.Keypad2, VirtualKey.NumberPad2 },
-            { UIKeyboardHidUsage.Keypad3, VirtualKey.NumberPad3 },
-            { UIKeyboardHidUsage.Keypad4, VirtualKey.NumberPad4 },
-            { UIKeyboardHidUsage.Keypad5, VirtualKey.NumberPad5 },
-            { UIKeyboardHidUsage.Keypad6, VirtualKey.NumberPad6 },
-            { UIKeyboardHidUsage.Keypad7, VirtualKey.NumberPad7 },
-            { UIKeyboardHidUsage.Keypad8, VirtualKey.NumberPad8 },
-            { UIKeyboardHidUsage.Keypad9, VirtualKey.NumberPad9 },
-            { UIKeyboardHidUsage.Keypad0, VirtualKey.NumberPad0 },
-            { UIKeyboardHidUsage.KeypadPeriod, VirtualKey.Decimal },
-            //{ UIKeyboardHidUsage.KeyboardNonUSBackslash, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardApplication, VirtualKey.Application },
-            //{ UIKeyboardHidUsage.KeyboardPower, VirtualKey. },
-            { UIKeyboardHidUsage.KeypadEqualSign, VirtualKey.Enter },
-            //{ UIKeyboardHidUsage.KeyboardF13, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF14, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF15, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF16, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF17, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF18, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF19, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF20, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF21, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF22, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF23, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardF24, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardExecute, VirtualKey.Execute },
-            { UIKeyboardHidUsage.KeyboardHelp, VirtualKey.Help },
-            { UIKeyboardHidUsage.KeyboardMenu, VirtualKey.Menu },
-            { UIKeyboardHidUsage.KeyboardSelect, VirtualKey.Select },
-            { UIKeyboardHidUsage.KeyboardStop, VirtualKey.Stop },
-            //{ UIKeyboardHidUsage.KeyboardAgain, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardUndo, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardCut, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardCopy, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardPaste, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardFind, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardMute, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardVolumeUp, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardVolumeDown, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLockingCapsLock, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLockingNumLock, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLockingScrollLock, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeypadComma, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeypadEqualSignAS400, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational1, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational2, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational3, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational4, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational5, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational6, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational7, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational8, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardInternational9, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang1, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang2, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang3, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang4, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang5, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang6, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang7, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang8, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardLang9, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardAlternateErase, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardSysReqOrAttention, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardCancel, VirtualKey.Cancel },
-            { UIKeyboardHidUsage.KeyboardClear, VirtualKey.Clear },
-            //{ UIKeyboardHidUsage.KeyboardPrior, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardReturn, VirtualKey.Enter },
-            { UIKeyboardHidUsage.KeyboardSeparator, VirtualKey.Separator },
-            //{ UIKeyboardHidUsage.KeyboardOut, VirtualKey },
-            //{ UIKeyboardHidUsage.KeyboardOper, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardClearOrAgain, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardCrSelOrProps, VirtualKey. },
-            //{ UIKeyboardHidUsage.KeyboardExSel, VirtualKey. },
-            { UIKeyboardHidUsage.KeyboardLeftControl, VirtualKey.LeftControl },
-            { UIKeyboardHidUsage.KeyboardLeftShift, VirtualKey.LeftShift },
-            { UIKeyboardHidUsage.KeyboardLeftAlt, VirtualKey.LeftWindows },
-            { UIKeyboardHidUsage.KeyboardLeftGui, VirtualKey.LeftMenu },
-            { UIKeyboardHidUsage.KeyboardRightControl, VirtualKey.RightControl },
-            { UIKeyboardHidUsage.KeyboardRightShift, VirtualKey.RightShift },
-            { UIKeyboardHidUsage.KeyboardRightAlt, VirtualKey.RightWindows },
-            { UIKeyboardHidUsage.KeyboardRightGui, VirtualKey.RightMenu },
-            //{ UIKeyboardHidUsage.KeyboardReserved, VirtualKey },
-            //{ UIKeyboardHidUsage.KeyboardHangul, VirtualKey.Hangul }, // ??? Exception thrown?
-            { UIKeyboardHidUsage.KeyboardHanja, VirtualKey.Hanja },
-            { UIKeyboardHidUsage.KeyboardKanaSwitch, VirtualKey.Kana },
-            //{ UIKeyboardHidUsage.KeyboardAlphanumericSwitch, VirtualKey },
-            //{ UIKeyboardHidUsage.KeyboardKatakana, VirtualKey },
-            //{ UIKeyboardHidUsage.KeyboardHiragana, VirtualKey },
-            //{ UIKeyboardHidUsage.KeyboardZenkakuHankakuKanji, VirtualKey },
-        };
-#endif
+    internal static VirtualKey AsVirtualKey(this UIKeyboardHidUsage keycode)
+    {
+        if (KeyCodeMap.TryGetValue(keycode, out var virtualKey))
+            return virtualKey;
+        return VirtualKey.None;
     }
+
+
+    private static readonly Dictionary<UIKeyboardHidUsage, VirtualKey> KeyCodeMap = new()
+    {
+        { UIKeyboardHidUsage.KeyboardA, VirtualKey.A },
+        { UIKeyboardHidUsage.KeyboardB, VirtualKey.B },
+        { UIKeyboardHidUsage.KeyboardC, VirtualKey.C },
+        { UIKeyboardHidUsage.KeyboardD, VirtualKey.D },
+        { UIKeyboardHidUsage.KeyboardE, VirtualKey.E },
+        { UIKeyboardHidUsage.KeyboardF, VirtualKey.F },
+        { UIKeyboardHidUsage.KeyboardG, VirtualKey.G },
+        { UIKeyboardHidUsage.KeyboardH, VirtualKey.H },
+        { UIKeyboardHidUsage.KeyboardI, VirtualKey.I },
+        { UIKeyboardHidUsage.KeyboardJ, VirtualKey.J },
+        { UIKeyboardHidUsage.KeyboardK, VirtualKey.K },
+        { UIKeyboardHidUsage.KeyboardL, VirtualKey.L },
+        { UIKeyboardHidUsage.KeyboardM, VirtualKey.M },
+        { UIKeyboardHidUsage.KeyboardN, VirtualKey.N },
+        { UIKeyboardHidUsage.KeyboardO, VirtualKey.O },
+        { UIKeyboardHidUsage.KeyboardP, VirtualKey.P },
+        { UIKeyboardHidUsage.KeyboardQ, VirtualKey.Q },
+        { UIKeyboardHidUsage.KeyboardR, VirtualKey.R },
+        { UIKeyboardHidUsage.KeyboardS, VirtualKey.S },
+        { UIKeyboardHidUsage.KeyboardT, VirtualKey.T },
+        { UIKeyboardHidUsage.KeyboardU, VirtualKey.U },
+        { UIKeyboardHidUsage.KeyboardV, VirtualKey.V },
+        { UIKeyboardHidUsage.KeyboardW, VirtualKey.W },
+        { UIKeyboardHidUsage.KeyboardX, VirtualKey.X },
+        { UIKeyboardHidUsage.KeyboardY, VirtualKey.Y },
+        { UIKeyboardHidUsage.KeyboardZ, VirtualKey.Z },
+        { UIKeyboardHidUsage.Keyboard1, VirtualKey.Number1 },
+        { UIKeyboardHidUsage.Keyboard2, VirtualKey.Number2 },
+        { UIKeyboardHidUsage.Keyboard3, VirtualKey.Number3 },
+        { UIKeyboardHidUsage.Keyboard4, VirtualKey.Number4 },
+        { UIKeyboardHidUsage.Keyboard5, VirtualKey.Number5 },
+        { UIKeyboardHidUsage.Keyboard6, VirtualKey.Number6 },
+        { UIKeyboardHidUsage.Keyboard7, VirtualKey.Number7 },
+        { UIKeyboardHidUsage.Keyboard8, VirtualKey.Number8 },
+        { UIKeyboardHidUsage.Keyboard9, VirtualKey.Number9 },
+        { UIKeyboardHidUsage.Keyboard0, VirtualKey.Number0 },
+        { UIKeyboardHidUsage.KeyboardReturnOrEnter, VirtualKey.Enter },
+        { UIKeyboardHidUsage.KeyboardEscape, VirtualKey.Escape },
+        { UIKeyboardHidUsage.KeyboardDeleteOrBackspace, VirtualKey.Back },
+        { UIKeyboardHidUsage.KeyboardTab, VirtualKey.Tab },
+        { UIKeyboardHidUsage.KeyboardSpacebar, VirtualKey.Space },
+        { UIKeyboardHidUsage.KeyboardHyphen, VirtualKey.Subtract },
+        //{ UIKeyboardHidUsage.KeyboardEqualSign, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardOpenBracket, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardCloseBracket, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardBackslash, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardNonUSPound, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardSemicolon, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardQuote, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardGraveAccentAndTilde, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardComma, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardPeriod, VirtualKey. }, // Is this .Decimal ???????  <<<<<<<<
+        //{ UIKeyboardHidUsage.KeyboardSlash, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardCapsLock, VirtualKey.CapitalLock },
+        { UIKeyboardHidUsage.KeyboardF1, VirtualKey.F1 },
+        { UIKeyboardHidUsage.KeyboardF2, VirtualKey.F2 },
+        { UIKeyboardHidUsage.KeyboardF3, VirtualKey.F3 },
+        { UIKeyboardHidUsage.KeyboardF4, VirtualKey.F4 },
+        { UIKeyboardHidUsage.KeyboardF5, VirtualKey.F5 },
+        { UIKeyboardHidUsage.KeyboardF6, VirtualKey.F6 },
+        { UIKeyboardHidUsage.KeyboardF7, VirtualKey.F7 },
+        { UIKeyboardHidUsage.KeyboardF8, VirtualKey.F8 },
+        { UIKeyboardHidUsage.KeyboardF9, VirtualKey.F9 },
+        { UIKeyboardHidUsage.KeyboardF10, VirtualKey.F10 },
+        { UIKeyboardHidUsage.KeyboardF11, VirtualKey.F11 },
+        { UIKeyboardHidUsage.KeyboardF12, VirtualKey.F12 },
+        { UIKeyboardHidUsage.KeyboardPrintScreen, VirtualKey.Print },
+        { UIKeyboardHidUsage.KeyboardScrollLock, VirtualKey.Scroll },
+        { UIKeyboardHidUsage.KeyboardPause, VirtualKey.Pause },
+        { UIKeyboardHidUsage.KeyboardInsert, VirtualKey.Insert },
+        { UIKeyboardHidUsage.KeyboardHome, VirtualKey.Home },
+        { UIKeyboardHidUsage.KeyboardPageUp, VirtualKey.PageUp },
+        { UIKeyboardHidUsage.KeyboardDeleteForward, VirtualKey.Delete },
+        { UIKeyboardHidUsage.KeyboardEnd, VirtualKey.End },
+        { UIKeyboardHidUsage.KeyboardPageDown, VirtualKey.PageDown },
+        { UIKeyboardHidUsage.KeyboardRightArrow, VirtualKey.Right },
+        { UIKeyboardHidUsage.KeyboardLeftArrow, VirtualKey.Left },
+        { UIKeyboardHidUsage.KeyboardDownArrow, VirtualKey.Down },
+        { UIKeyboardHidUsage.KeyboardUpArrow, VirtualKey.Up },
+        { UIKeyboardHidUsage.KeypadNumLock, VirtualKey.NumberKeyLock },
+        { UIKeyboardHidUsage.KeypadSlash, VirtualKey.Divide },
+        { UIKeyboardHidUsage.KeypadAsterisk, VirtualKey.Multiply },
+        { UIKeyboardHidUsage.KeypadHyphen, VirtualKey.Subtract },
+        { UIKeyboardHidUsage.KeypadPlus, VirtualKey.Add },
+        { UIKeyboardHidUsage.KeypadEnter, VirtualKey.Enter },
+        { UIKeyboardHidUsage.Keypad1, VirtualKey.NumberPad1 },
+        { UIKeyboardHidUsage.Keypad2, VirtualKey.NumberPad2 },
+        { UIKeyboardHidUsage.Keypad3, VirtualKey.NumberPad3 },
+        { UIKeyboardHidUsage.Keypad4, VirtualKey.NumberPad4 },
+        { UIKeyboardHidUsage.Keypad5, VirtualKey.NumberPad5 },
+        { UIKeyboardHidUsage.Keypad6, VirtualKey.NumberPad6 },
+        { UIKeyboardHidUsage.Keypad7, VirtualKey.NumberPad7 },
+        { UIKeyboardHidUsage.Keypad8, VirtualKey.NumberPad8 },
+        { UIKeyboardHidUsage.Keypad9, VirtualKey.NumberPad9 },
+        { UIKeyboardHidUsage.Keypad0, VirtualKey.NumberPad0 },
+        { UIKeyboardHidUsage.KeypadPeriod, VirtualKey.Decimal },
+        //{ UIKeyboardHidUsage.KeyboardNonUSBackslash, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardApplication, VirtualKey.Application },
+        //{ UIKeyboardHidUsage.KeyboardPower, VirtualKey. },
+        { UIKeyboardHidUsage.KeypadEqualSign, VirtualKey.Enter },
+        //{ UIKeyboardHidUsage.KeyboardF13, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF14, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF15, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF16, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF17, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF18, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF19, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF20, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF21, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF22, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF23, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardF24, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardExecute, VirtualKey.Execute },
+        { UIKeyboardHidUsage.KeyboardHelp, VirtualKey.Help },
+        { UIKeyboardHidUsage.KeyboardMenu, VirtualKey.Menu },
+        { UIKeyboardHidUsage.KeyboardSelect, VirtualKey.Select },
+        { UIKeyboardHidUsage.KeyboardStop, VirtualKey.Stop },
+        //{ UIKeyboardHidUsage.KeyboardAgain, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardUndo, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardCut, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardCopy, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardPaste, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardFind, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardMute, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardVolumeUp, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardVolumeDown, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLockingCapsLock, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLockingNumLock, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLockingScrollLock, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeypadComma, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeypadEqualSignAS400, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational1, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational2, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational3, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational4, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational5, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational6, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational7, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational8, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardInternational9, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang1, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang2, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang3, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang4, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang5, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang6, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang7, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang8, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardLang9, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardAlternateErase, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardSysReqOrAttention, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardCancel, VirtualKey.Cancel },
+        { UIKeyboardHidUsage.KeyboardClear, VirtualKey.Clear },
+        //{ UIKeyboardHidUsage.KeyboardPrior, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardReturn, VirtualKey.Enter },
+        { UIKeyboardHidUsage.KeyboardSeparator, VirtualKey.Separator },
+        //{ UIKeyboardHidUsage.KeyboardOut, VirtualKey },
+        //{ UIKeyboardHidUsage.KeyboardOper, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardClearOrAgain, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardCrSelOrProps, VirtualKey. },
+        //{ UIKeyboardHidUsage.KeyboardExSel, VirtualKey. },
+        { UIKeyboardHidUsage.KeyboardLeftControl, VirtualKey.LeftControl },
+        { UIKeyboardHidUsage.KeyboardLeftShift, VirtualKey.LeftShift },
+        { UIKeyboardHidUsage.KeyboardLeftAlt, VirtualKey.LeftWindows },
+        { UIKeyboardHidUsage.KeyboardLeftGui, VirtualKey.LeftMenu },
+        { UIKeyboardHidUsage.KeyboardRightControl, VirtualKey.RightControl },
+        { UIKeyboardHidUsage.KeyboardRightShift, VirtualKey.RightShift },
+        { UIKeyboardHidUsage.KeyboardRightAlt, VirtualKey.RightWindows },
+        { UIKeyboardHidUsage.KeyboardRightGui, VirtualKey.RightMenu },
+        //{ UIKeyboardHidUsage.KeyboardReserved, VirtualKey },
+        //{ UIKeyboardHidUsage.KeyboardHangul, VirtualKey.Hangul }, // ??? Exception thrown?
+        { UIKeyboardHidUsage.KeyboardHanja, VirtualKey.Hanja },
+        { UIKeyboardHidUsage.KeyboardKanaSwitch, VirtualKey.Kana },
+        //{ UIKeyboardHidUsage.KeyboardAlphanumericSwitch, VirtualKey },
+        //{ UIKeyboardHidUsage.KeyboardKatakana, VirtualKey },
+        //{ UIKeyboardHidUsage.KeyboardHiragana, VirtualKey },
+        //{ UIKeyboardHidUsage.KeyboardZenkakuHankakuKanji, VirtualKey },
+    };
+#endif
 }
