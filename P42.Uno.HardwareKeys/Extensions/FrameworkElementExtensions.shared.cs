@@ -13,56 +13,33 @@ using Microsoft.UI.Input;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace P42.Uno.HardwareKeys
+namespace P42.Uno.HardwareKeys;
+
+static class FrameworkExtensions
 {
-    static class FrameworkExtensions
+    public static bool IsTextEditable(this Control control)
     {
-        public static bool IsTextEditable(this Control control)
-        {
-            if (control == null)
-                return false;
-
-            if (!control.IsEnabled)
-                return false;
-
-            if (control.Visibility == Visibility.Collapsed) 
-                return false;
-
-            var type = control.GetType();
-
-            if (type.GetProperty("QueryText") is PropertyInfo queryTextProperty &&
-                queryTextProperty.CanWrite)
-                return true;
-
-            if (type.GetProperty("Text") is PropertyInfo textProperty &&
-                textProperty.CanWrite)
-            {
-                if (type.GetProperty("IsReadOnly") is PropertyInfo readOnlyProperty)
-                {
-                    if (readOnlyProperty.CanRead &&
-                        readOnlyProperty.PropertyType == typeof(bool))
-                    {
-                        return !(bool)readOnlyProperty.GetValue(control);
-                    }
-                }
-
-                if (type.GetProperty("IsEditable") is PropertyInfo editableProperty &&
-                    editableProperty.CanRead &&
-                    editableProperty.PropertyType == typeof(bool))
-                {
-                    return (bool)editableProperty.GetValue(control);
-                }
-
-                if (type.GetProperty("IsTextSearchEnabled ") is PropertyInfo textSearchProperty &&
-                    textSearchProperty.CanRead &&
-                    textSearchProperty.PropertyType == typeof(bool))
-                {
-                    return (bool)textSearchProperty.GetValue(control);
-                }
-            }
-
-
+        if (control == null)
             return false;
-        }
+
+        if (!control.IsEnabled)
+            return false;
+
+        if (control.Visibility == Visibility.Collapsed) 
+            return false;
+
+        if (control is TextBox textBox)
+            return !textBox.IsReadOnly;
+
+        if (control is RichEditBox rBox)
+            return !rBox.IsReadOnly;
+
+        if (control is ComboBox cBox)
+            return cBox.IsEditable || cBox.IsTextSearchEnabled;
+
+        if (control is AutoSuggestBox aBox)
+            return true;
+
+        return false;
     }
 }

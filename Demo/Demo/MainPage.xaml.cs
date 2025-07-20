@@ -50,12 +50,15 @@ public sealed partial class MainPage : Page
 
     void UpdateModifiers(object sender, KeyState state)
     {
-        _capsLockBorder.Background = _listener.IsCapsLockEngaged == KeyState.True ? _gray : _listener.IsCapsLockEngaged == KeyState.False ? _transparent : _unknown;
-        _shiftBorder.Background = _listener.IsShiftPressed == KeyState.True ? _gray : _listener.IsShiftPressed == KeyState.False ? _transparent : _unknown;
-        _controlBorder.Background = _listener.IsControlPressed == KeyState.True ? _gray : _listener.IsControlPressed == KeyState.False ? _transparent : _unknown;
-        _windowsBorder.Background = _listener.IsWindowsPressed == KeyState.True ? _gray : _listener.IsWindowsPressed == KeyState.False ? _transparent : _unknown;
-        _menuBorder.Background = _listener.IsMenuPressed == KeyState.True ? _gray : _listener.IsMenuPressed == KeyState.False ? _transparent : _unknown;
-        _numLockBorder.Background = _listener.IsNumLockEngaged == KeyState.True ? _gray : _listener.IsNumLockEngaged == KeyState.False ? _transparent : _unknown;
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            _capsLockBorder.Background = _listener.IsCapsLockEngaged == KeyState.True ? _gray : _listener.IsCapsLockEngaged == KeyState.False ? _transparent : _unknown;
+            _shiftBorder.Background = _listener.IsShiftPressed == KeyState.True ? _gray : _listener.IsShiftPressed == KeyState.False ? _transparent : _unknown;
+            _controlBorder.Background = _listener.IsControlPressed == KeyState.True ? _gray : _listener.IsControlPressed == KeyState.False ? _transparent : _unknown;
+            _windowsBorder.Background = _listener.IsWindowsPressed == KeyState.True ? _gray : _listener.IsWindowsPressed == KeyState.False ? _transparent : _unknown;
+            _menuBorder.Background = _listener.IsMenuPressed == KeyState.True ? _gray : _listener.IsMenuPressed == KeyState.False ? _transparent : _unknown;
+            _numLockBorder.Background = _listener.IsNumLockEngaged == KeyState.True ? _gray : _listener.IsNumLockEngaged == KeyState.False ? _transparent : _unknown;
+        });
     }
 
     private void _listener_KeyUp(object? sender, UnoKeyEventArgs e)
@@ -78,9 +81,19 @@ public sealed partial class MainPage : Page
     private void FocusManager_GotFocus(object? sender, FocusManagerGotFocusEventArgs e)
     {
         if (e.NewFocusedElement is FrameworkElement element)
-            _currentFocusTextBlock.Text = element.Name;
+        {
+
+            _currentFocusTextBlock.Text = string.IsNullOrWhiteSpace(element.Name)
+                ? "NO ELEMENT NAME"
+                : element.Name;
+        }
         else
-            _currentFocusTextBlock.Text = e.NewFocusedElement?.ToString() ?? "NO FOCUS";
+        {
+            _currentFocusTextBlock.Text = string.IsNullOrWhiteSpace(e.NewFocusedElement?.ToString())
+                ? "NO FOCUS"
+                : e.NewFocusedElement?.ToString();
+            _listener.Focus(FocusState.Programmatic);
+        }
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -90,19 +103,25 @@ public sealed partial class MainPage : Page
         if (element is FrameworkElement focusedElement)
             _currentFocusTextBlock.Text = focusedElement.Name;
         else
+        {
             _currentFocusTextBlock.Text = element?.ToString() ?? "NO FOCUS";
+            _listener.Focus(FocusState.Programmatic);
+        }
     }
 
 
     private void _hwKeysActiveToggle_Toggled(object sender, RoutedEventArgs e)
     {
         _listener.IsActive = _hwKeysActiveToggle.IsOn;
+        _listener.Focus(FocusState.Programmatic);
+
     }
 
     // _hwKeysIsTabToMoveFocus_Toggled
     private void _hwKeysIsTabToMoveFocus_Toggled(object sender, RoutedEventArgs e)
     {
         _listener.IsTabToMoveFocusEnabled = _hwKeysIsTabToMoveFocusToggle.IsOn;
+        _listener.Focus(FocusState.Programmatic);
     }
 
 }
