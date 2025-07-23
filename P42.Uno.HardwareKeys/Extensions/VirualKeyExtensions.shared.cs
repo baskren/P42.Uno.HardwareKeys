@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -641,5 +641,63 @@ namespace P42.Uno.HardwareKeys
             //{ UIKeyboardHidUsage.KeyboardZenkakuHankakuKanji, VirtualKey },
         };
 #endif
+
+        internal static VirtualKey AsVirtualKey(this string  key)
+        {
+            if (KeyMap.TryGetValue(key.ToUpper(), out var mappedKey))
+                return mappedKey;
+            return VirtualKey.None;
+        }
+
+        readonly static Dictionary<string, VirtualKey> KeyMap = new Dictionary<string, VirtualKey>
+        {
+            { "A", VirtualKey.A },
+            { "B", VirtualKey.B },
+            { "C", VirtualKey.C },
+            { "D", VirtualKey.D },
+            { "E", VirtualKey.E },
+            { "F", VirtualKey.F },
+            { "G", VirtualKey.G },
+            { "H", VirtualKey.H },
+            { "I", VirtualKey.I },
+            { "J", VirtualKey.J },
+            { "K", VirtualKey.K },
+            { "L", VirtualKey.L },
+            { "M", VirtualKey.M },
+            { "N", VirtualKey.N },
+            { "O", VirtualKey.O },
+            { "P", VirtualKey.P },
+            { "Q", VirtualKey.Q },
+            { "R", VirtualKey.R },
+            { "S", VirtualKey.S },
+            { "T", VirtualKey.T },
+            { "U", VirtualKey.U },
+            { "V", VirtualKey.V },
+            { "W", VirtualKey.W },
+            { "X", VirtualKey.X },
+            { "Y", VirtualKey.Y },
+            { "Z", VirtualKey.Z },
+            { "1", VirtualKey.Number1 },
+            { "2", VirtualKey.Number2 },
+            { "3", VirtualKey.Number3 },
+            { "4", VirtualKey.Number4 },
+            { "5", VirtualKey.Number5 },
+            { "6", VirtualKey.Number6 },
+            { "7", VirtualKey.Number7 },
+            { "8", VirtualKey.Number8 },
+            { "9", VirtualKey.Number9 },
+            { "0", VirtualKey.Number0 },
+            { "\n", VirtualKey.Enter },
+            { "\t", VirtualKey.Tab },
+            { " ", VirtualKey.Space },
+            { "-", VirtualKey.Subtract },
+            { ".", VirtualKey.Decimal }, // Is this .Decimal ???????  <<<<<<<<
+            { "/", VirtualKey.Divide },
+            { "*", VirtualKey.Multiply },
+            { "+", VirtualKey.Add },
+ 
+        };
     }
+
+
 }

@@ -1,3 +1,5 @@
+#if !__IOS__ //&& !__ANDROID__
+
 /*******************************************************************
  *
  * Common source for .net bait, mac, tizen, windows, wasm, and skia
@@ -216,3 +218,5 @@ partial class CoreListener : Button
     }
 
 }
+
+#endif
