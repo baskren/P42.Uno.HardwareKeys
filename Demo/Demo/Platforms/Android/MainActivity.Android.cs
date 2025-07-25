@@ -20,4 +20,10 @@ public class MainActivity : Microsoft.UI.Xaml.ApplicationActivity
         base.OnCreate(savedInstanceState);
     }
 
+
+    public override bool DispatchKeyEvent(KeyEvent e)
+    {
+        return P42.Uno.HardwareKeys.Listener.HandledDispatchKeyEvent(e) ||
+               base.DispatchKeyEvent(e);
+    }
 }

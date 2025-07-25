@@ -1,7 +1,6 @@
-#if !__MACCATALYST__
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Foundation;
@@ -23,36 +22,75 @@ partial class CoreListener : TextBox
     {
         Name = "HardwareKeys.CoreListener";
         _platformCoreElement = this;
+        #if __IOS__
         UIKeyboard.Notifications.ObserveWillShow(OnShown);
+        #endif
+        AcceptsReturn = false;
+        IsReadOnly = false;
         IsNumLockEngaged = KeyState.False;
         IsSpellCheckEnabled = false;
         IsTextPredictionEnabled = false;
         CharacterCasing = CharacterCasing.Normal;
         PreventKeyboardDisplayOnProgrammaticFocus = true;
+        FocusState = FocusState.Unfocused;
+        HorizontalAlignment = HorizontalAlignment.Stretch;
 
+        KeyDown += OnKeyDown;
+        KeyUp += OnKeyUp;
         BeforeTextChanging += OnBeforeTextChanging;
+        TextChanged += OnTextChanged;
+        Loaded += OnLoaded;
     }
 
+    
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        DispatcherQueue.TryEnqueue(async () =>
+        {
+            //var parent = _textBox.Parent;//BDDDSDFSDFSawait Task.Delay(3000);
+            //await FocusManager.TryFocusAsync(parent, FocusState.Pointer);
+            await FocusManager.TryFocusAsync(this, FocusState.Keyboard);
+        });
+    }
 
+    private void OnKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        // 
+        Debug.WriteLine($"OnKeyDown: [{e.Key}] ");
+        e.Handled = true; // Mark the event as handled
+    }
+
+    private void OnKeyUp(object sender, KeyRoutedEventArgs e)
+    {
+        Debug.WriteLine($"OnKeyUp: [{e.Key}] ");
+        e.Handled = true; // Mark the event as handled
+    }
 
     private void OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
     {
-
         var keyText = args.NewText;
         if (string.IsNullOrEmpty(keyText))
             return;
         var virtKey = keyText.AsVirtualKey();
         OnSimpleKeyDown(keyText, virtKey);
         OnSimpleKeyUp(keyText, virtKey);
-        args.Cancel = true;
-        Text = "";
+        //args.Cancel = true;
+        //Text = "";
     }
+
+    private void OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(Text))
+            return;
+        
+        Text = string.Empty;
+    }
+
 
     private void OnShown(object sender, UIKeyboardEventArgs e)
     {
         // this only happens if the hardware keyboard is not enabled and, thus, the software keyboard appears
         //IsActive = false;
-#if __IOS__
         if (IsActive || FocusManually)
         {
             var focused = FocusManager.GetFocusedElement();
@@ -63,7 +101,6 @@ partial class CoreListener : TextBox
             IsActive = false;
         }
 
-#endif
     }
 
     (VirtualKey, string) MapUiKey(UIKey uiKey)
@@ -137,7 +174,6 @@ partial class CoreListener : TextBox
     }
     */
 
-
     void SyncModifiers(UIKey uiKey)
     {
         if (uiKey.KeyCode == UIKeyboardHidUsage.KeyboardCapsLock)
@@ -169,9 +205,8 @@ partial class CoreListener : TextBox
                 flags.Add(flag);
         //System.Diagnostics.Debug.WriteLine($"[{uiKey.KeyCode}] Modifiers: [{string.Join(",", flags)}]");
     }
+    
 }
-#pragma warning restore CA1422 // Validate platform compatibility
 
 
-#endif
 

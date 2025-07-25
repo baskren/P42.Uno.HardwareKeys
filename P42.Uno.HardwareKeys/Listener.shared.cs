@@ -182,6 +182,11 @@ public partial class Listener : Grid
     }
     #endregion
 
-
+#if __ANDROID__
+    public static bool HandledDispatchKeyEvent(global::Android.Views.KeyEvent e)
+    {
+        return CoreListener.Active?.DispatchKeyEvent(e) ?? false;
+    }
+#endif
 
 }

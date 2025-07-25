@@ -1,4 +1,4 @@
-#if !__IOS__ //&& !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
 /*******************************************************************
  *
@@ -130,6 +130,12 @@ partial class CoreListener : Button
     {
         System.Diagnostics.Debug.WriteLine($"TEXT: [{args.NewText}]");
 
+        if (string.IsNullOrEmpty(args.NewText))
+        {
+            args.Cancel = true;
+            return; // no text, nothing to do
+        } 
+    
 #if WINDOWS
         if (_waitingForText && !string.IsNullOrEmpty(args.NewText))
         {
@@ -142,7 +148,13 @@ partial class CoreListener : Button
         FatFingerBuffer[_lastKeyDown] = args.NewText;
         _lastTextEntered = args.NewText;
 #endif
+        
+#if __ANDROID__
+        _textBox.Text = string.Empty;
+#else
         args.Cancel = true;
+#endif
+        
     }
 
     VirtualKey _lastKeyDown;
