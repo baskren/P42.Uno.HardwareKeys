@@ -34,6 +34,7 @@ partial class CoreListener : TextBox
         PreventKeyboardDisplayOnProgrammaticFocus = true;
         FocusState = FocusState.Unfocused;
         HorizontalAlignment = HorizontalAlignment.Stretch;
+        AcceptsReturn = true;
 
         KeyDown += OnKeyDown;
         KeyUp += OnKeyUp;
