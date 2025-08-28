@@ -42,7 +42,7 @@
     },
     "P42.Uno.HardwareKeys.Demo (Desktop WSL2)": {
       "commandName": "WSL2",
-      "commandLineArgs": "{ProjectDir}/bin/Debug/net8.0-desktop/P42.Uno.HardwareKeys.Demo.dll",
+      "commandLineArgs": "{ProjectDir}/bin/Debug/net9.0-desktop/P42.Uno.HardwareKeys.Demo.dll",
       "distributionName": "",
       "compatibleTargetFramework": "desktop"
     }
