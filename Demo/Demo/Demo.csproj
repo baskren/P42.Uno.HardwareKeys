@@ -1,4 +1,4 @@
-<Project Sdk="Uno.Sdk">
+﻿<Project Sdk="Uno.Sdk">
   <PropertyGroup>
     <TargetFrameworks>
       net9.0-android;
@@ -36,16 +36,16 @@
       https://aka.platform.uno/singleproject-features
     -->
     <UnoFeatures>
-      Lottie;
+      CSharpMarkup;
       Toolkit;
-      MVUX;
+      SkiaRenderer;
     </UnoFeatures>
   </PropertyGroup>
 
 
     <ItemGroup>
-      <ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="../../P42.Uno.HardwareKeys/P42.Uno.HardwareKeys.csproj "  />
-      <PackageReference Condition=" '$(Configuration)' == 'Release' " Include="P42.Uno.HardwareKeys"  />
+      <ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="../../P42.Uno.HardwareKeys/P42.Uno.HardwareKeys.csproj " />
+      <PackageReference Condition=" '$(Configuration)' == 'Release' " Include="P42.Uno.HardwareKeys" />
     </ItemGroup>
 
 

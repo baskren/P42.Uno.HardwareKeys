@@ -19,9 +19,16 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        // Load WinUI Resources
+        Resources.Build(r => r.Merged(
+            new XamlControlsResources()));
+
+        // Load Uno.UI.Toolkit Resources
+        Resources.Build(r => r.Merged(
+            new ToolkitResources()));
         MainWindow = new Window();
 #if DEBUG
-        MainWindow.EnableHotReload();
+        MainWindow.UseStudio();
 #endif
 
 

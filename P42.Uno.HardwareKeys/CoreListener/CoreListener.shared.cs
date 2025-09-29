@@ -464,7 +464,7 @@ internal partial class CoreListener
 
 
     private Windows.UI.Core.CoreVirtualKeyStates WinUIKeyState(VirtualKey key)
-        => Window.Current?.CoreWindow.GetKeyState(key) ?? InputKeyboardSource.GetKeyStateForCurrentThread(key);
+        => Microsoft.UI.Xaml.Window.Current?.CoreWindow.GetKeyState(key) ?? InputKeyboardSource.GetKeyStateForCurrentThread(key);
 
     private KeyState WinUIKeyEngaged(VirtualKey key, Windows.UI.Core.CoreVirtualKeyStates state)
         => (WinUIKeyState(key) & state) != 0
