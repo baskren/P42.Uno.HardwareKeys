@@ -1,12 +1,8 @@
 <Project ToolsVersion="15.0">
-
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally> 
-  </PropertyGroup>
   
   <!-- SHARED REFERENCES -->
   <ItemGroup>
-  	<PackageReference Include="P42.Serilog.QuickLog" Version="1.0.9" />
+  	<PackageReference Include="P42.Serilog.QuickLog"  />
   </ItemGroup>
   <!-- PLATFORM SPECIFIC REFERENCES -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
