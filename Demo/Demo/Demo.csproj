@@ -45,8 +45,12 @@
     <ItemGroup>
       <ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="../../P42.Uno.HardwareKeys/P42.Uno.HardwareKeys.csproj " />
       <PackageReference Condition=" '$(Configuration)' == 'Release' " Include="P42.Uno.HardwareKeys" />
+
+
+      <!-- Uno.Sdk 6.5.36 Warning fix -->
       <PackageReference Include="System.Security.Cryptography.Xml" />
       <PackageReference Include="Tmds.DBus.Protocol" />
+      
     </ItemGroup>
 
 
